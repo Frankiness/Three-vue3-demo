@@ -15,7 +15,6 @@ const loadBuildingModel = () => {
     template.scene.add(gltf.scene);
   })
 }
-
 loadBuildingModel()
 </script>
 

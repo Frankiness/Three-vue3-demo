@@ -1,6 +1,7 @@
 import * as THREE from 'three'
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
 import {TWEEN} from "three/examples/jsm/libs/tween.module.min";
+import Stats from "three/examples/jsm/libs/stats.module";
 
 export default class RendererTemplate {
   constructor() {
@@ -58,19 +59,47 @@ export default class RendererTemplate {
     this.initFloor()
     this.addAxes()
     this.initLight()
+    this.addStats()
     const animate = () => {
       requestAnimationFrame(animate);
       this.renderer.render(this.scene, this.camera);
+      this.stats.update()
       try {　// 放在 TWEEN.js未加载完成导致报错
         TWEEN.update();
       } catch (error) {
         console.log(error)
       }
     }
-    animate()
-    this.flyTo()
-    this.randomBoxGeometry()
 
+    this.flyTo()
+    this.randomGenerationGeometry()
+    animate()
+    let _this = this
+
+
+    function addRaycaster(event) {
+      let mouse = new THREE.Vector2();
+      let x, y;
+      if (event.changedTouches) {
+        x = event.changedTouches[0].pageX;
+        y = event.changedTouches[0].pageY;
+      } else {
+        x = event.clientX;
+        y = event.clientY;
+      }
+      mouse.x = (x / window.innerWidth) * 2 - 1;
+      mouse.y = -(y / window.innerHeight) * 2 + 1;
+      let raycaster = new THREE.Raycaster();//拾取射线
+      raycaster.setFromCamera(mouse, _this.camera);
+      const intersection = raycaster.intersectObject(_this.mesh);
+      if (intersection.length > 0) {
+        const instanceId = intersection[0].instanceId;
+        _this.mesh.setColorAt(instanceId, new THREE.Color(255, 255, 255));
+        _this.mesh.instanceColor.needsUpdate = true;
+      }
+    }
+
+    document.addEventListener('click', addRaycaster);
   }
 
   initFloor() {
@@ -99,6 +128,12 @@ export default class RendererTemplate {
     this.scene.add(helper);
   }
 
+  //性能监控插件
+  addStats() {
+    this.stats = new Stats();
+    document.body.appendChild(this.stats.domElement);
+  }
+
   flyTo() {
     let tweenA = this.cameraCon({x: 10, y: 50, z: 50}, 3000)
     let tweenB = this.cameraCon({x: 50, y: 25, z: -50}, 4000)
@@ -117,32 +152,23 @@ export default class RendererTemplate {
     return tween
   }
 
-  randomBoxGeometry() {
-    for (let i = 0; i < 30; i++) {
-      let g = new THREE.BoxGeometry(1, 1, 1)
-      let m = new THREE.MeshBasicMaterial({color: 0x000fff})
-      let box = new THREE.Mesh(g, m)
-      box.position.set(Math.random() * 10, Math.random() * 10, Math.random() * 10)
-      this.scene.add(box)
+  randomGenerationGeometry() {
+    let count = 10000;
+    const geometry = new THREE.IcosahedronGeometry(3, 3);
+    const material = new THREE.MeshPhongMaterial();
+    geometry.computeVertexNormals();
+
+    this.mesh = new THREE.InstancedMesh(geometry, material, count);
+
+    const color = new THREE.Color()
+    const matrix = new THREE.Matrix4();
+
+    for (let i = 0; i < count; i++) {
+      matrix.setPosition(Math.random() * 1000, Math.random() * 1000, Math.random() * 1000)
+      this.mesh.setMatrixAt(i, matrix);//这里的i即instanceId
+      this.mesh.setColorAt(i, color.setHex(Math.random() * 0xffffff));
     }
-
-    const container = document.querySelector("body")
-    container.addEventListener('click', (e) => {
-      this.addRaycaster(e)
-    })
-  }
-
-
-  addRaycaster(event) {
-    let vector = new THREE.Vector3((event.clientX / window.innerWidth) * 2 - 1, -(event.clientY / window
-        .innerHeight) * 2 + 1, 0.5);
-    vector = vector.unproject(this.camera); // 将屏幕的坐标转换成三维场景中的坐标
-    const meshArray = this.scene.children.filter(item => item.isMesh)
-    const raycaster = new THREE.Raycaster(this.camera.position, vector.sub(this.camera.position).normalize());
-    const intersects = raycaster.intersectObjects(meshArray, true);
-    if (intersects.length > 0) {
-      intersects[0].object.material.color.set("#ff0000");
-    }
+    this.scene.add(this.mesh);
   }
 
 
