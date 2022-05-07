@@ -50,9 +50,24 @@ export default class RendererTemplate {
     this.el.appendChild(renderer.domElement);
     this.renderer = renderer;
     this.controls = new OrbitControls(this.camera, renderer.domElement)//轨迹控制
+
   }
 
   init() {
+    const animate = () => {
+      requestAnimationFrame(animate);
+      this.renderer.render(this.scene, this.camera);
+      this.stats.update()
+      this.texture.offset.x += 0.01;
+
+      // 放在 TWEEN.js未加载完成导致报错
+      try {
+        TWEEN.update();
+      } catch (error) {
+        console.log(error)
+      }
+    }
+
     this.initScene();
     this.initPerspectiveCamera();
     this.initRenderer();
@@ -60,24 +75,14 @@ export default class RendererTemplate {
     this.addAxes()
     this.initLight()
     this.addStats()
-    const animate = () => {
-      requestAnimationFrame(animate);
-      this.renderer.render(this.scene, this.camera);
-      this.stats.update()
-      try {　// 放在 TWEEN.js未加载完成导致报错
-        TWEEN.update();
-      } catch (error) {
-        console.log(error)
-      }
-    }
-
     this.flyTo()
     this.randomGenerationGeometry()
+    this.flowTexture()
     animate()
     let _this = this
 
 
-    function addRaycaster(event) {
+    const addRaycaster = (event) => {
       let mouse = new THREE.Vector2();
       let x, y;
       if (event.changedTouches) {
@@ -154,22 +159,39 @@ export default class RendererTemplate {
 
   randomGenerationGeometry() {
     let count = 10000;
-    const geometry = new THREE.IcosahedronGeometry(3, 3);
-    const material = new THREE.MeshPhongMaterial();
+    const geometry = new THREE.IcosahedronGeometry(3, 0);
+    const material = new THREE.MeshPhongMaterial({
+      wireframe: true
+    });
     geometry.computeVertexNormals();
 
     this.mesh = new THREE.InstancedMesh(geometry, material, count);
-
     const color = new THREE.Color()
     const matrix = new THREE.Matrix4();
-
     for (let i = 0; i < count; i++) {
       matrix.setPosition(Math.random() * 1000, Math.random() * 1000, Math.random() * 1000)
       this.mesh.setMatrixAt(i, matrix);//这里的i即instanceId
-      this.mesh.setColorAt(i, color.setHex(Math.random() * 0xffffff));
+      this.mesh.setColorAt(i, color.setHex(Math.random() * 10 * 0xf00000));
+
     }
     this.scene.add(this.mesh);
   }
 
+  flowTexture() {
+    this.texture = new THREE.TextureLoader().load('texture.PNG')
+    this.texture.wrapS = THREE.RepeatWrapping;
+    this.texture.wrapT = THREE.RepeatWrapping;
+    this.texture.repeat.x = 10;
+    this.texture.repeat.y = 1;
 
+    const planeGeometry = new THREE.PlaneGeometry(200, 10);
+    const plane = new THREE.MeshBasicMaterial();
+    plane.color = new THREE.Color(0x00ff00);
+    plane.map = this.texture;
+    plane.transparent = true;
+    plane.side = THREE.DoubleSide;
+
+    const mesh = new THREE.Mesh(planeGeometry, plane)
+    this.scene.add(mesh)
+  }
 }
