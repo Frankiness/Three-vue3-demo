@@ -58,7 +58,7 @@ export default class RendererTemplate {
       requestAnimationFrame(animate);
       this.renderer.render(this.scene, this.camera);
       this.stats.update()
-      this.texture.offset.x += 0.01;
+      // this.texture.offset.x += 0.01;
 
       // 放在 TWEEN.js未加载完成导致报错
       try {
@@ -77,7 +77,7 @@ export default class RendererTemplate {
     this.addStats()
     this.flyTo()
     this.randomGenerationGeometry()
-    this.flowTexture()
+    // this.flowTexture()
     animate()
     let _this = this
 
