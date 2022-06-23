@@ -80,28 +80,28 @@ export default class RendererTemplate {
     // this.flowTexture() //地板贴图
     animate()
     let _this = this
-    const addRaycaster = (event) => {
-      let mouse = new THREE.Vector2();
-      let x, y;
-      if (event.changedTouches) {
-        x = event.changedTouches[0].pageX;
-        y = event.changedTouches[0].pageY;
-      } else {
-        x = event.clientX;
-        y = event.clientY;
-      }
-      mouse.x = (x / window.innerWidth) * 2 - 1;
-      mouse.y = -(y / window.innerHeight) * 2 + 1;
-      let raycaster = new THREE.Raycaster();//拾取射线
-      raycaster.setFromCamera(mouse, _this.camera);
-      const intersection = raycaster.intersectObject(_this.mesh);
-      if (intersection.length > 0) {
-        const instanceId = intersection[0].instanceId;
-        _this.mesh.setColorAt(instanceId, new THREE.Color(255, 255, 255));
-        _this.mesh.instanceColor.needsUpdate = true;
-      }
-    }
-    document.addEventListener('click', addRaycaster);
+    // const addRaycaster = (event) => {
+    //   let mouse = new THREE.Vector2();
+    //   let x, y;
+    //   if (event.changedTouches) {
+    //     x = event.changedTouches[0].pageX;
+    //     y = event.changedTouches[0].pageY;
+    //   } else {
+    //     x = event.clientX;
+    //     y = event.clientY;
+    //   }
+    //   mouse.x = (x / window.innerWidth) * 2 - 1;
+    //   mouse.y = -(y / window.innerHeight) * 2 + 1;
+    //   let raycaster = new THREE.Raycaster();//拾取射线
+    //   raycaster.setFromCamera(mouse, _this.camera);
+    //   const intersection = raycaster.intersectObject(_this.mesh);
+    //   if (intersection.length > 0) {
+    //     const instanceId = intersection[0].instanceId;
+    //     _this.mesh.setColorAt(instanceId, new THREE.Color(255, 255, 255));
+    //     _this.mesh.instanceColor.needsUpdate = true;
+    //   }
+    // }
+    // document.addEventListener('click', addRaycaster);
   }
 
   initFloor() {
