@@ -1,35 +1,14 @@
-<template></template>
+<template>
+  <div id="container" ref="container"></div>
+</template>
 <!--suppress JSVoidFunctionReturnValueUsed -->
 <script setup>
 import RendererTemplate from "../utils/RendererTemplate";
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+import {GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader";
 import * as THREE from "three";
 import * as d3 from "d3";
+import {onMounted, ref} from "vue";
 
-const template = new RendererTemplate();
-template.init();
-
-const loadBuildingModel = () => {
-  const GLTF = new GLTFLoader().load(
-    "model/leishen.glb",
-    (gltf) => {
-      const model = gltf.scene;
-      model.scale.set(0.1, 0.1, 0.1);
-      model.position.set(1, 1, 0);
-      model.rotation.x = new THREE.Euler(0, 1, 1.57, "XYZ");
-      console.log(model);
-      template.scene.add(gltf.scene);
-    },
-    // 加载过程中的回调函数
-    (xhr) => {
-      console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
-    },
-    // 加载出错的回调
-    (err) => {
-      console.error("An error happened", err);
-    }
-  );
-};
 
 function loadJSON() {
   // 加载json文件
@@ -44,10 +23,10 @@ function initMap(chinaJson) {
   const positions = [];
   // 墨卡托投影转换
   const projection = d3
-    .geoMercator()
-    .center([104.0, 37.5])
-    .scale(80)
-    .translate([0, 0]);
+      .geoMercator()
+      .center([104.0, 37.5])
+      .scale(80)
+      .translate([0, 0]);
   chinaJson.features.forEach((elem) => {
     // 每个的 坐标 数组
     const coordinates = elem.geometry.coordinates;
@@ -69,8 +48,8 @@ function initMap(chinaJson) {
         }
         const vertices = new Float32Array(positions);
         lineGeometry.setAttribute(
-          "position",
-          new THREE.Float32BufferAttribute(vertices, 3)
+            "position",
+            new THREE.Float32BufferAttribute(vertices, 3)
         );
         lineGeometry.computeBoundingSphere();
         const extrudeSettings = {
@@ -98,8 +77,40 @@ function initMap(chinaJson) {
   });
 }
 
-loadBuildingModel();
-// loadJSON()
+// loadJSON
+const container = ref(null)
+onMounted(() => {
+  const template = new RendererTemplate(container.value);
+  template.init();
+
+  const loadBuildingModel = () => {
+    const GLTF = new GLTFLoader().load(
+        "model/leishen.glb",
+        (gltf) => {
+          const model = gltf.scene;
+          model.scale.set(0.1, 0.1, 0.1);
+          model.position.set(1, 1, 0);
+          model.rotation.x = new THREE.Euler(0, 1, 1.57, "XYZ");
+          console.log(model);
+          template.scene.add(gltf.scene);
+        },
+        // 加载过程中的回调函数
+        (xhr) => {
+          console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
+        },
+        // 加载出错的回调
+        (err) => {
+          console.error("An error happened", err);
+        }
+    );
+  };
+  loadBuildingModel()
+})
 </script>
 
-<style scoped></style>
+<style scoped>
+#container {
+  width: 100%;
+  height: 100%;
+}
+</style>

@@ -3,8 +3,8 @@ import {createRouter, createWebHistory} from "vue-router";
 const routes = [
   {
     path: "/",
-    name: "IndexDB",
-    component: () => import("../components/IndexDB.vue"),
+    name: "Tesla",
+    component: () => import("../components/Tesla.vue"),
   },
   {
     path: "/three",

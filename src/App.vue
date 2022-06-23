@@ -1,13 +1,12 @@
 <script setup>
-import Main from './views/main.vue'
-</script>
+import Main from './views/main.vue'</script>
 
 <template>
   <Main></Main>
 </template>
 
 <style>
-body{
+body {
   margin: 0;
   padding: 0;
 }

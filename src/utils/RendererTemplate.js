@@ -4,9 +4,9 @@ import {TWEEN} from "three/examples/jsm/libs/tween.module.min";
 import Stats from "three/examples/jsm/libs/stats.module";
 
 export default class RendererTemplate {
-  constructor() {
+  constructor(container) {
     //各种默认选项
-    this.el = document.body;
+    this.el = container;
     this.PCamera = {
       fov: 45,
       aspect: window.innerWidth / window.innerHeight,
@@ -16,8 +16,8 @@ export default class RendererTemplate {
     this.cameraPostion = new THREE.Vector3(10, 10, 10);
     this.cameraLookAt = new THREE.Vector3(0, 0, 0);
     this.rendererColor = new THREE.Color(0xF0F8FF);
-    this.rendererWidth = window.innerWidth;
-    this.rendererHeight = window.innerHeight;
+    this.rendererWidth = this.el.clientWidth;
+    this.rendererHeight = this.el.clientHeight;
 
     this.p1 = {x: 10, y: 20, z: 100}
   }
@@ -50,14 +50,14 @@ export default class RendererTemplate {
     this.el.appendChild(renderer.domElement);
     this.renderer = renderer;
     this.controls = new OrbitControls(this.camera, renderer.domElement)//轨迹控制
-
+    this.controls.autoRotate = true
   }
 
   init() {
     const animate = () => {
       requestAnimationFrame(animate);
       this.renderer.render(this.scene, this.camera);
-      this.stats.update()
+      // this.stats.update()
       // this.texture.offset.x += 0.01;
 
       // 放在 TWEEN.js未加载完成导致报错
@@ -74,14 +74,12 @@ export default class RendererTemplate {
     this.initFloor()
     this.addAxes()
     this.initLight()
-    this.addStats()
+    // this.addStats()
     this.flyTo()
-    this.randomGenerationGeometry()
-    // this.flowTexture()
+    // this.randomGenerationGeometry() //加载点云
+    // this.flowTexture() //地板贴图
     animate()
     let _this = this
-
-
     const addRaycaster = (event) => {
       let mouse = new THREE.Vector2();
       let x, y;
@@ -103,7 +101,6 @@ export default class RendererTemplate {
         _this.mesh.instanceColor.needsUpdate = true;
       }
     }
-
     document.addEventListener('click', addRaycaster);
   }
 
@@ -119,8 +116,31 @@ export default class RendererTemplate {
   initLight() {
     const ambientLight = new THREE.AmbientLight(0xffffff); // soft white light
     this.scene.add(ambientLight);
-    const hemisphere = new THREE.HemisphereLight(0xffffbb, 0xffffff, 1);
+    const hemisphere = new THREE.HemisphereLight(0xffffff, 0xffffff, 1);
     this.scene.add(hemisphere);
+
+    //给场景添加太阳光
+    let Sun = new THREE.DirectionalLight(0xffffff, 1);
+    Sun.position.set(20, 20, 20);
+    Sun.castShadow = true;
+
+    //设置相机渲染面积
+    Sun.shadow.camera.near = 0.01;
+    Sun.shadow.camera.far = 6000;
+    Sun.shadow.camera.top = 2200;
+    Sun.shadow.camera.bottom = -2200;
+    Sun.shadow.camera.left = -3500;
+    Sun.shadow.camera.right = 3500;
+    // 设置阴影分辨率
+    Sun.shadow.mapSize.width = 2048;  // default
+    Sun.shadow.mapSize.height = 2048; // default
+    //阴影限制
+    Sun.shadow.radius = 1;
+    this.scene.add(Sun);
+
+    let directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+    directionalLight.position.set(-4, 8, 4)
+    this.scene.add(directionalLight);
   }
 
   addAxes() {

@@ -42,8 +42,8 @@ export default defineComponent({
   },
   setup() {
     return {
-      selectedKeys: ref<string[]>(['1']),
-      collapsed: ref<boolean>(false),
+      selectedKeys: ref(['1']),
+      collapsed: ref(false),
     };
   },
 });
