@@ -13,13 +13,13 @@ export default class RendererTemplate {
       near: 1,
       far: 100000,
     };
-    this.cameraPostion = new THREE.Vector3(10, 10, 10);
-    this.cameraLookAt = new THREE.Vector3(0, 0, 0);
+    this.cameraPostion = new THREE.Vector3(5, 109, -338);
+    this.cameraLookAt = new THREE.Vector3(-7, 40, -150);
     this.rendererColor = new THREE.Color(0xF0F8FF);
     this.rendererWidth = this.el.clientWidth;
     this.rendererHeight = this.el.clientHeight;
 
-    this.p1 = {x: 10, y: 20, z: 100}
+    this.p1 = {x: 5, y: 109, z: -238}
   }
 
   initPerspectiveCamera() {
@@ -33,7 +33,6 @@ export default class RendererTemplate {
     camera.position.copy(this.cameraPostion);
     camera.lookAt(this.cameraLookAt);
     this.camera = camera;
-
     this.scene.add(camera);
   }
 
@@ -47,6 +46,8 @@ export default class RendererTemplate {
     const renderer = new THREE.WebGLRenderer();
     renderer.setClearColor(this.rendererColor);
     renderer.setSize(this.rendererWidth, this.rendererHeight);
+    renderer.toneMapping = THREE.NoToneMapping;
+    renderer.outputEncoding = THREE.sRGBEncoding;
     this.el.appendChild(renderer.domElement);
     this.renderer = renderer;
     this.controls = new OrbitControls(this.camera, renderer.domElement)//轨迹控制
@@ -75,7 +76,7 @@ export default class RendererTemplate {
     this.addAxes()
     this.initLight()
     // this.addStats()
-    this.flyTo()
+    // this.flyTo()
     // this.randomGenerationGeometry() //加载点云
     // this.flowTexture() //地板贴图
     animate()
@@ -114,32 +115,8 @@ export default class RendererTemplate {
   }
 
   initLight() {
-    const ambientLight = new THREE.AmbientLight(0xffffff); // soft white light
-    this.scene.add(ambientLight);
-    const hemisphere = new THREE.HemisphereLight(0xffffff, 0xffffff, 1);
-    this.scene.add(hemisphere);
-
-    //给场景添加太阳光
-    let Sun = new THREE.DirectionalLight(0xffffff, 1);
-    Sun.position.set(20, 20, 20);
-    Sun.castShadow = true;
-
-    //设置相机渲染面积
-    Sun.shadow.camera.near = 0.01;
-    Sun.shadow.camera.far = 6000;
-    Sun.shadow.camera.top = 2200;
-    Sun.shadow.camera.bottom = -2200;
-    Sun.shadow.camera.left = -3500;
-    Sun.shadow.camera.right = 3500;
-    // 设置阴影分辨率
-    Sun.shadow.mapSize.width = 2048;  // default
-    Sun.shadow.mapSize.height = 2048; // default
-    //阴影限制
-    Sun.shadow.radius = 1;
-    this.scene.add(Sun);
-
-    let directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
-    directionalLight.position.set(-4, 8, 4)
+    let directionalLight = new THREE.DirectionalLight(0xffffff, 0.2);
+    directionalLight.position.set(10, 10, 10);
     this.scene.add(directionalLight);
   }
 
@@ -160,8 +137,8 @@ export default class RendererTemplate {
   }
 
   flyTo() {
-    let tweenA = this.cameraCon({x: 10, y: 50, z: 50}, 3000)
-    let tweenB = this.cameraCon({x: 50, y: 25, z: -50}, 4000)
+    let tweenA = this.cameraCon({x: 5, y: 109, z: -238}, 3000)
+    let tweenB = this.cameraCon({x: -7.529974502551607, y: 35.074820819964735, z: -157.84738245271905}, 4000)
     tweenA.chain(tweenB)
     tweenB.start()
   }
