@@ -1,4 +1,5 @@
 <template>
+  <!--  <router-view></router-view>-->
   <a-layout style="width: 100vw;height: 100vh;">
     <a-layout-sider>
       <a-menu v-model:selectedKeys="selectedKeys" theme="dark" mode="inline">

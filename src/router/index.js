@@ -6,11 +6,11 @@ const routes = [
     name: "Tesla",
     component: () => import("../components/Tesla.vue"),
   },
-  {
-    path: "/three",
-    name: "three",
-    component: () => import("../components/ThreePage.vue"),
-  },
+  // {
+  //   path: "/",
+  //   name: "test",
+  //   component: () => import("../components/Test.vue"),
+  // },
 ];
 
 const router = createRouter({

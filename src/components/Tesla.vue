@@ -52,11 +52,9 @@ const initScene = async () => {
   const house = await loadFile('model/Scene/scene.gltf')
 
   house.scene.scale.set(10, 10, 10)
-  house.scene.position.set(0, 30, 0)
-
+  house.scene.position.set(0, 28, 0)
 
   template.scene.add(house.scene)
-  template.flyTo()
   addLightProbe()
 }
 //颜色选择
@@ -82,7 +80,6 @@ const dismantleModel = () => {
     if (child.isMesh) {
       child.fromPosition = [child.position.x, child.position.y, child.position.z]
       child.toPosition = [Math.random() * r, Math.random() * r, Math.random() * r]
-      console.log(child)
     }
   })
 }
@@ -109,13 +106,19 @@ const addLightProbe = () => {
     cubeTexture.encoding = THREE.sRGBEncoding;
 
     // template.scene.background = cubeTexture; // 添加至场景中
-
     lightProbe.copy(LightProbeGenerator.fromCubeTexture(cubeTexture));
 
     const gltf = await loadFile('model/Audi/scene.gltf')
-    gltf.scene.scale.set(0.05, 0.05, 0.05);
-    gltf.scene.position.set(-10, 9, -50);
-    gltf.scene.rotation.set(0, Math.PI / 1.2, 0);
+    let trex = gltf.scene
+    trex.scale.set(0.05, 0.05, 0.05);
+    trex.position.set(-10, 9, -50);
+    trex.rotation.set(0, Math.PI / 1.2, 0);
+    trex.traverse((node) => {
+      if (node.isMesh) {
+        node.castShadow = true;
+        node.receiveShadow = true
+      }
+    });
 
     const material = new THREE.MeshStandardMaterial({
       color: 0xffffff,
@@ -126,9 +129,10 @@ const addLightProbe = () => {
     });
 
     // mesh
-    gltf.scene.traverse(function (child) {
+    trex.traverse(function (child) {
       if (child.name.includes('Body_Paint')) {
         child.material = material;
+        child.material.emissiveMap = child.material.map;
       }
     });
     template.scene.add(gltf.scene);

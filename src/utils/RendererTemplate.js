@@ -1,6 +1,5 @@
 import * as THREE from 'three'
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
-import {TWEEN} from "three/examples/jsm/libs/tween.module.min";
 import Stats from "three/examples/jsm/libs/stats.module";
 
 export default class RendererTemplate {
@@ -13,13 +12,11 @@ export default class RendererTemplate {
       near: 1,
       far: 100000,
     };
-    this.cameraPostion = new THREE.Vector3(5, 109, -338);
+    this.cameraPostion = new THREE.Vector3(-7.5, 35, -158);
     this.cameraLookAt = new THREE.Vector3(-7, 40, -150);
     this.rendererColor = new THREE.Color(0xF0F8FF);
     this.rendererWidth = this.el.clientWidth;
     this.rendererHeight = this.el.clientHeight;
-
-    this.p1 = {x: 5, y: 109, z: -238}
   }
 
   initPerspectiveCamera() {
@@ -48,10 +45,10 @@ export default class RendererTemplate {
     renderer.setSize(this.rendererWidth, this.rendererHeight);
     renderer.toneMapping = THREE.NoToneMapping;
     renderer.outputEncoding = THREE.sRGBEncoding;
+    renderer.shadowMap.enabled = true; //阴影投射
     this.el.appendChild(renderer.domElement);
     this.renderer = renderer;
     this.controls = new OrbitControls(this.camera, renderer.domElement)//轨迹控制
-    this.controls.autoRotate = true
   }
 
   init() {
@@ -59,14 +56,6 @@ export default class RendererTemplate {
       requestAnimationFrame(animate);
       this.renderer.render(this.scene, this.camera);
       // this.stats.update()
-      // this.texture.offset.x += 0.01;
-
-      // 放在 TWEEN.js未加载完成导致报错
-      try {
-        TWEEN.update();
-      } catch (error) {
-        console.log(error)
-      }
     }
 
     this.initScene();
@@ -76,54 +65,39 @@ export default class RendererTemplate {
     this.addAxes()
     this.initLight()
     // this.addStats()
-    // this.flyTo()
-    // this.randomGenerationGeometry() //加载点云
     // this.flowTexture() //地板贴图
     animate()
-    let _this = this
-    // const addRaycaster = (event) => {
-    //   let mouse = new THREE.Vector2();
-    //   let x, y;
-    //   if (event.changedTouches) {
-    //     x = event.changedTouches[0].pageX;
-    //     y = event.changedTouches[0].pageY;
-    //   } else {
-    //     x = event.clientX;
-    //     y = event.clientY;
-    //   }
-    //   mouse.x = (x / window.innerWidth) * 2 - 1;
-    //   mouse.y = -(y / window.innerHeight) * 2 + 1;
-    //   let raycaster = new THREE.Raycaster();//拾取射线
-    //   raycaster.setFromCamera(mouse, _this.camera);
-    //   const intersection = raycaster.intersectObject(_this.mesh);
-    //   if (intersection.length > 0) {
-    //     const instanceId = intersection[0].instanceId;
-    //     _this.mesh.setColorAt(instanceId, new THREE.Color(255, 255, 255));
-    //     _this.mesh.instanceColor.needsUpdate = true;
-    //   }
-    // }
-    // document.addEventListener('click', addRaycaster);
   }
 
   initFloor() {
-    const floorGeometry = new THREE.PlaneGeometry(1000, 1000, 1)
-    const floorMaterial = new THREE.ShadowMaterial({color: 0x000000, opacity: 0.2});
+    const floorGeometry = new THREE.PlaneGeometry(800, 800, 1);
+    const textureLoader = new THREE.TextureLoader()
+    let texture = textureLoader.load("texture/pisa/ny1.png")
+    const floorMaterial = new THREE.MeshPhongMaterial({map: texture})
+    // const floorMaterial = new THREE.MeshPhongMaterial({color: 0xffffff})
     const floor = new THREE.Mesh(floorGeometry, floorMaterial)
+    floor.receiveShadow = true; // 接受阴影
     floor.rotation.x = -Math.PI / 2
-    floor.position.y = -0.01
+    floor.position.y = -0.5
     this.scene.add(floor)
   }
 
   initLight() {
-    let directionalLight = new THREE.DirectionalLight(0xffffff, 0.2);
-    directionalLight.position.set(10, 10, 10);
-    this.scene.add(directionalLight);
+    let spotLight = new THREE.SpotLight(0xffffff, 0.2);
+    spotLight.position.set(-21, 50, -20);
+    spotLight.castShadow = true;
+    spotLight.shadow.mapSize.width = 2048;	//阴影贴图宽度设置为2048像素
+    spotLight.shadow.mapSize.height = 2048;	//阴影贴图高度设置为2048像素
+    spotLight.shadow.camera.near = 0.5;    // default
+    spotLight.shadow.camera.far = 500;     // default
+    const spotLightHelper = new THREE.SpotLightHelper(spotLight, 50, 0xff0000);
+    this.scene.add(spotLightHelper);
+    this.scene.add(spotLight);
   }
 
   addAxes() {
     const axes = new THREE.AxisHelper(100);
     this.scene.add(axes);
-
     const helper = new THREE.GridHelper(2000, 100);
     helper.material.opacity = 0.25;
     helper.material.transparent = true;
@@ -134,44 +108,6 @@ export default class RendererTemplate {
   addStats() {
     this.stats = new Stats();
     document.body.appendChild(this.stats.domElement);
-  }
-
-  flyTo() {
-    let tweenA = this.cameraCon({x: 5, y: 109, z: -238}, 3000)
-    let tweenB = this.cameraCon({x: -7.529974502551607, y: 35.074820819964735, z: -157.84738245271905}, 4000)
-    tweenA.chain(tweenB)
-    tweenB.start()
-  }
-
-  cameraCon(p2, time) {
-    let tween = new TWEEN.Tween(this.p1).to(p2, time).easing(TWEEN.Easing.Quadratic.InOut)
-    tween.onUpdate(() => {
-      this.camera.position.set(this.p1.x, this.p1.y, this.p1.z)
-      this.camera.lookAt(0, 0, 0)
-      this.controls.target.set(0, 0, 0) // 确保镜头移动后，视觉中心还在圆点处
-      this.controls.update()
-    })
-    return tween
-  }
-
-  randomGenerationGeometry() {
-    let count = 10000;
-    const geometry = new THREE.IcosahedronGeometry(3, 0);
-    const material = new THREE.MeshPhongMaterial({
-      wireframe: true
-    });
-    geometry.computeVertexNormals();
-
-    this.mesh = new THREE.InstancedMesh(geometry, material, count);
-    const color = new THREE.Color()
-    const matrix = new THREE.Matrix4();
-    for (let i = 0; i < count; i++) {
-      matrix.setPosition(Math.random() * 1000, Math.random() * 1000, Math.random() * 1000)
-      this.mesh.setMatrixAt(i, matrix);//这里的i即instanceId
-      this.mesh.setColorAt(i, color.setHex(Math.random() * 10 * 0xf00000));
-
-    }
-    this.scene.add(this.mesh);
   }
 
   flowTexture() {
