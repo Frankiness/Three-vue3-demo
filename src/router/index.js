@@ -1,4 +1,4 @@
-import {createRouter, createWebHistory} from "vue-router";
+import { createRouter, createWebHistory } from "vue-router";
 
 const routes = [
   {
@@ -6,6 +6,11 @@ const routes = [
     name: "Tesla",
     component: () => import("../components/Tesla.vue"),
   },
+  // {
+  //   path: "/",
+  //   name: "Shader",
+  //   component: () => import("../components/Shader.vue"),
+  // },
   // {
   //   path: "/",
   //   name: "test",

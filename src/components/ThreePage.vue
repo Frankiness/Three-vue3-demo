@@ -6,8 +6,7 @@
 import RendererTemplate from "../utils/RendererTemplate";
 import * as THREE from "three";
 import * as d3 from "d3";
-import {onMounted, ref} from "vue";
-
+import { onMounted, ref } from "vue";
 
 function loadJSON() {
   // 加载json文件
@@ -22,10 +21,10 @@ function initMap(chinaJson) {
   const positions = [];
   // 墨卡托投影转换
   const projection = d3
-      .geoMercator()
-      .center([104.0, 37.5])
-      .scale(80)
-      .translate([0, 0]);
+    .geoMercator()
+    .center([104.0, 37.5])
+    .scale(80)
+    .translate([0, 0]);
   chinaJson.features.forEach((elem) => {
     // 每个的 坐标 数组
     const coordinates = elem.geometry.coordinates;
@@ -47,8 +46,8 @@ function initMap(chinaJson) {
         }
         const vertices = new Float32Array(positions);
         lineGeometry.setAttribute(
-            "position",
-            new THREE.Float32BufferAttribute(vertices, 3)
+          "position",
+          new THREE.Float32BufferAttribute(vertices, 3)
         );
         lineGeometry.computeBoundingSphere();
         const extrudeSettings = {
@@ -77,12 +76,11 @@ function initMap(chinaJson) {
 }
 
 // loadJSON
-const container = ref(null)
+const container = ref(null);
 onMounted(() => {
   const template = new RendererTemplate(container.value);
   template.init();
-
-})
+});
 </script>
 
 <style scoped>

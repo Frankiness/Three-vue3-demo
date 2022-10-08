@@ -51,10 +51,14 @@ export default class RendererTemplate {
     this.controls = new OrbitControls(this.camera, renderer.domElement)//轨迹控制
   }
 
+  render() {
+    this.renderer.render(this.scene, this.camera);
+  }
+
   init() {
     const animate = () => {
       requestAnimationFrame(animate);
-      this.renderer.render(this.scene, this.camera);
+      this.render()
       // this.stats.update()
     }
 
@@ -72,27 +76,27 @@ export default class RendererTemplate {
   initFloor() {
     const floorGeometry = new THREE.PlaneGeometry(800, 800, 1);
     const textureLoader = new THREE.TextureLoader()
-    let texture = textureLoader.load("texture/pisa/ny1.png")
-    const floorMaterial = new THREE.MeshPhongMaterial({map: texture})
+    // let texture = textureLoader.load("texture/pisa/ny1.png")
+    // const floorMaterial = new THREE.MeshPhongMaterial({map: texture})
     // const floorMaterial = new THREE.MeshPhongMaterial({color: 0xffffff})
-    const floor = new THREE.Mesh(floorGeometry, floorMaterial)
-    floor.receiveShadow = true; // 接受阴影
-    floor.rotation.x = -Math.PI / 2
-    floor.position.y = -0.5
-    this.scene.add(floor)
+    // const floor = new THREE.Mesh(floorGeometry, floorMaterial)
+    // floor.receiveShadow = true; // 接受阴影
+    // floor.rotation.x = -Math.PI / 2
+    // floor.position.y = -0.5
+    // this.scene.add(floor)
   }
 
   initLight() {
-    let spotLight = new THREE.SpotLight(0xffffff, 0.2);
-    spotLight.position.set(-21, 50, -20);
-    spotLight.castShadow = true;
-    spotLight.shadow.mapSize.width = 2048;	//阴影贴图宽度设置为2048像素
-    spotLight.shadow.mapSize.height = 2048;	//阴影贴图高度设置为2048像素
-    spotLight.shadow.camera.near = 0.5;    // default
-    spotLight.shadow.camera.far = 500;     // default
-    const spotLightHelper = new THREE.SpotLightHelper(spotLight, 50, 0xff0000);
-    this.scene.add(spotLightHelper);
-    this.scene.add(spotLight);
+    // let spotLight = new THREE.SpotLight(0xffffff, 0.2);
+    // spotLight.position.set(-21, 50, -20);
+    // spotLight.castShadow = true;
+    // spotLight.shadow.mapSize.width = 2048;	//阴影贴图宽度设置为2048像素
+    // spotLight.shadow.mapSize.height = 2048;	//阴影贴图高度设置为2048像素
+    // spotLight.shadow.camera.near = 0.5;    // default
+    // spotLight.shadow.camera.far = 500;     // default
+    // const spotLightHelper = new THREE.SpotLightHelper(spotLight, 50, 0xff0000);
+    // this.scene.add(spotLightHelper);
+    // this.scene.add(spotLight);
   }
 
   addAxes() {
