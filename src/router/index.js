@@ -3,14 +3,18 @@ import { createRouter, createWebHistory } from "vue-router";
 const routes = [
   {
     path: "/",
-    name: "Tesla",
+    redirect: "/display-car",
+  },
+  {
+    path: "/display-car",
+    name: "display-car",
     component: () => import("../components/Tesla.vue"),
   },
-  // {
-  //   path: "/",
-  //   name: "Shader",
-  //   component: () => import("../components/Shader.vue"),
-  // },
+  {
+    path: "/shadow",
+    name: "shadow",
+    component: () => import("../components/Shadow.vue"),
+  },
   // {
   //   path: "/",
   //   name: "test",
