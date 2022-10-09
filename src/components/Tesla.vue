@@ -1,61 +1,63 @@
 <template>
   <div id="container" ref="container">
-    <a-input @change="selectColor" type="color" class="color-select" />
+    <a-input @change="selectColor" type="color" class="color-select"/>
   </div>
+  <Mask :show="maskShow" :percent="progress"/>
 </template>
 <!--suppress JSVoidFunctionReturnValueUsed -->
 <script setup>
 import * as THREE from "three";
-import { CubeTextureLoader, LightProbe } from "three";
+import {CubeTextureLoader, LightProbe} from "three";
 import RendererTemplate from "../utils/RendererTemplate";
-import { onMounted, ref } from "vue";
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
-import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader";
-import { LightProbeGenerator } from "three/examples/jsm/lights/LightProbeGenerator";
-import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader";
+import {onMounted, ref} from "vue";
+import {GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader";
+import {DRACOLoader} from "three/examples/jsm/loaders/DRACOLoader";
+import {LightProbeGenerator} from "three/examples/jsm/lights/LightProbeGenerator";
+import {RGBELoader} from "three/examples/jsm/loaders/RGBELoader";
 
+import Mask from './Mask.vue'
+
+let maskShow = ref(true)
+let progress = ref(0)
 let template, pointLight;
 const container = ref(null);
 const loader = new GLTFLoader();
 //使用draco压缩
 let dracoLoader = new DRACOLoader();
 dracoLoader.setDecoderPath("./draco/gltf/"); // 设置public下的解码路径，注意最后面的/
-dracoLoader.setDecoderConfig({ type: "js" });
+dracoLoader.setDecoderConfig({type: "js"});
 dracoLoader.preload();
 loader.setDRACOLoader(dracoLoader);
 
-let isLoading = ref(true); //是否显示loading  这个load模型监听的进度
-let loadingWidth = ref(0); // loading的进度
+/**
+ * 监听模型加载进度
+ * @param {String} url 模型地址
+ */
 const loadFile = (url) => {
   return new Promise((resolve, reject) => {
     loader.load(
-      url,
-      (gltf) => {
-        resolve(gltf);
-      },
-      ({ loaded, total }) => {
-        let load = Math.abs((loaded / total) * 100);
-        loadingWidth.value = load;
-        if (load >= 100) {
-          setTimeout(() => {
-            isLoading.value = false;
-          }, 1000);
+        url,
+        (gltf) => {
+          resolve(gltf);
+        },
+        ({loaded, total}) => {
+          progress.value = Math.abs((loaded / total) * 100)
+        },
+        (err) => {
+          reject(err);
         }
-        console.log((loaded / total) * 100 + "% loaded");
-      },
-      (err) => {
-        reject(err);
-      }
     );
   });
 };
+/**
+ * 初始化Scene
+ */
 const initScene = async () => {
   template = new RendererTemplate(container._value);
   template.init();
-  const house = await loadFile("model/Scene/scene.gltf");
-
-  house.scene.scale.set(10, 10, 10);
-  house.scene.position.set(0, 28, 0);
+  // const house = await loadFile("model/Scene/scene.gltf");
+  // house.scene.scale.set(10, 10, 10);
+  // house.scene.position.set(0, 28, 0);
 
   // template.scene.add(house.scene)
   addLightProbe();
@@ -121,19 +123,20 @@ const addLightProbe = () => {
     // const gltf = await loadFile('model/Audi/scene.gltf')
 
     new RGBELoader()
-      .setPath("texture/hdr/")
-      .load("royal_esplanade_4k.hdr", async function (texture) {
-        texture.mapping = THREE.EquirectangularReflectionMapping;
-        template.scene.background = texture;
-        template.scene.environment = texture;
-        template.render();
+        .setPath("texture/hdr/")
+        .load("royal_esplanade_4k.hdr", async function (texture) {
+          texture.mapping = THREE.EquirectangularReflectionMapping;
+          template.scene.background = texture;
+          template.scene.environment = texture;
+          template.render();
 
-        // model
-        const gltf = await loadFile("model/Audi/scene.gltf");
-        gltf.scene.scale.set(0.1, 0.1, 0.1);
-        template.scene.add(gltf.scene);
-        template.render();
-      });
+          // model
+          const gltf = await loadFile("model/Audi/scene.gltf");
+          maskShow.value = false //关闭遮罩层
+          gltf.scene.scale.set(0.1, 0.1, 0.1);
+          template.scene.add(gltf.scene);
+          template.render();
+        });
     // const gltf = await loadFile('model/Audi/scene.gltf')
     // let trex = gltf.scene
     // trex.scale.set(0.05, 0.05, 0.05);
@@ -171,9 +174,9 @@ const initLight = () => {
   pointLight.shadow.mapSize.width = 2048; //阴影贴图宽度设置为2048像素
   pointLight.shadow.mapSize.height = 2048; //阴影贴图高度设置为2048像素
   const pointLightHelper = new THREE.PointLightHelper(
-    pointLight,
-    500,
-    0xff0000
+      pointLight,
+      500,
+      0xff0000
   );
   template.scene.add(pointLightHelper);
   template.scene.add(pointLight);
