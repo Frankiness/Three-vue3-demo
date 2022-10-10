@@ -14,8 +14,17 @@
         <a-menu-item key="shadow">
           <span>投影</span>
         </a-menu-item>
-        <a-menu-item key="3">
-          <span>nav 3</span>
+        <a-menu-item key="map">
+          <span>Geojson转三维</span>
+        </a-menu-item>
+        <a-menu-item key="radar">
+          <span>雷达波</span>
+        </a-menu-item>
+        <a-menu-item key="wave">
+          <span>扩散波</span>
+        </a-menu-item>
+        <a-menu-item key="fly-line">
+          <span>飞线</span>
         </a-menu-item>
       </a-menu>
     </a-layout-sider>

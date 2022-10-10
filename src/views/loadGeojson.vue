@@ -1,23 +1,30 @@
 <template>
   <div id="container" ref="container"></div>
 </template>
-<!--suppress JSVoidFunctionReturnValueUsed -->
+
 <script setup>
 import RendererTemplate from "../utils/RendererTemplate";
 import * as THREE from "three";
 import * as d3 from "d3";
 import { onMounted, ref } from "vue";
 
-function loadJSON() {
-  // 加载json文件
+let template = ref(null);
+const container = ref(null);
+/**
+ * 加载json文件
+ */
+const loadJSON = () => {
   let loader = new THREE.FileLoader();
   loader.load("js/China2.json", (data) => {
     let jsonData = JSON.parse(data);
     initMap(jsonData);
   });
-}
+};
 
-function initMap(chinaJson) {
+/**
+ * 读取Geojson并绘制
+ */
+const initMap = (chinaJson) => {
   const positions = [];
   // 墨卡托投影转换
   const projection = d3
@@ -69,17 +76,20 @@ function initMap(chinaJson) {
         const mesh = new THREE.Mesh(geometry, [material, material1]);
         const line = new THREE.Line(lineGeometry, lineMaterial);
         template.scene.add(mesh);
-        // template.scene.add(line)
+        template.scene.add(line);
       });
     });
   });
-}
+};
 
+const init = () => {
+  template = new RendererTemplate(container.value); //初始化容器
+  template.init(new THREE.Vector3(10, 35, 158)); //重置相机位置
+};
 // loadJSON
-const container = ref(null);
 onMounted(() => {
-  const template = new RendererTemplate(container.value);
-  template.init();
+  init();
+  loadJSON();
 });
 </script>
 

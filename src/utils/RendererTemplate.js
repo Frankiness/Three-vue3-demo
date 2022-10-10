@@ -1,5 +1,5 @@
-import * as THREE from 'three'
-import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
+import * as THREE from "three";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import Stats from "three/examples/jsm/libs/stats.module";
 
 export default class RendererTemplate {
@@ -14,23 +14,23 @@ export default class RendererTemplate {
     };
     this.cameraPostion = new THREE.Vector3(-7.5, 35, -158);
     this.cameraLookAt = new THREE.Vector3(-7, 40, -150);
-    this.rendererColor = new THREE.Color(0xF0F8FF);
+    this.rendererColor = new THREE.Color(0xf0f8ff);
     this.rendererWidth = this.el.clientWidth;
     this.rendererHeight = this.el.clientHeight;
+    this.camera = null;
   }
 
-  initPerspectiveCamera() {
+  initPerspectiveCamera(cameraPos = this.cameraPostion) {
     //初始化相机，这里是透视相机
-    const camera = new THREE.PerspectiveCamera(
-        this.PCamera.fov,
-        this.PCamera.aspect,
-        this.PCamera.near,
-        this.PCamera.far
+    this.camera = new THREE.PerspectiveCamera(
+      this.PCamera.fov,
+      this.PCamera.aspect,
+      this.PCamera.near,
+      this.PCamera.far
     );
-    camera.position.copy(this.cameraPostion);
-    camera.lookAt(this.cameraLookAt);
-    this.camera = camera;
-    this.scene.add(camera);
+    this.camera.position.copy(cameraPos);
+    this.camera.lookAt(this.cameraLookAt);
+    this.scene.add(this.camera);
   }
 
   initScene() {
@@ -48,34 +48,42 @@ export default class RendererTemplate {
     renderer.shadowMap.enabled = true; //阴影投射
     this.el.appendChild(renderer.domElement);
     this.renderer = renderer;
-    this.controls = new OrbitControls(this.camera, renderer.domElement)//轨迹控制
+    this.controls = new OrbitControls(this.camera, renderer.domElement); //轨迹控制
+    this.controls.enableDamping = true; //鼠标拖动视角延迟效果
   }
 
   render() {
     this.renderer.render(this.scene, this.camera);
   }
-
-  init() {
+  /**
+   * 初始化
+   * @param {Vector3} cameraPos 相机位置
+   * @param {Funtion} callback animate函数回调
+   */
+  init(cameraPos, callback) {
+    const clock = new THREE.Clock();
     const animate = () => {
+      const dt = clock.getDelta();
+      callback && callback(dt);
       requestAnimationFrame(animate);
-      this.render()
+      this.render();
       // this.stats.update()
-    }
+    };
 
     this.initScene();
-    this.initPerspectiveCamera();
+    this.initPerspectiveCamera(cameraPos);
     this.initRenderer();
-    this.initFloor()
-    this.addAxes()
-    this.initLight()
+    // this.initFloor();
+    this.addAxes();
+    this.initLight();
     // this.addStats()
     // this.flowTexture() //地板贴图
-    animate()
+    animate();
   }
 
   initFloor() {
     const floorGeometry = new THREE.PlaneGeometry(800, 800, 1);
-    const textureLoader = new THREE.TextureLoader()
+    const textureLoader = new THREE.TextureLoader();
     // let texture = textureLoader.load("texture/pisa/ny1.png")
     // const floorMaterial = new THREE.MeshPhongMaterial({map: texture})
     // const floorMaterial = new THREE.MeshPhongMaterial({color: 0xffffff})
@@ -115,7 +123,7 @@ export default class RendererTemplate {
   }
 
   flowTexture() {
-    this.texture = new THREE.TextureLoader().load('texture.PNG')
+    this.texture = new THREE.TextureLoader().load("texture.PNG");
     this.texture.wrapS = THREE.RepeatWrapping;
     this.texture.wrapT = THREE.RepeatWrapping;
     this.texture.repeat.x = 10;
@@ -128,7 +136,15 @@ export default class RendererTemplate {
     plane.transparent = true;
     plane.side = THREE.DoubleSide;
 
-    const mesh = new THREE.Mesh(planeGeometry, plane)
-    this.scene.add(mesh)
+    const mesh = new THREE.Mesh(planeGeometry, plane);
+    this.scene.add(mesh);
+  }
+  /**
+   * 设置相机位置
+   * @param {Vector3} vec3
+   */
+  setCameraPosition(vec3) {
+    this.cameraPostion = vec3;
+    this.initPerspectiveCamera();
   }
 }

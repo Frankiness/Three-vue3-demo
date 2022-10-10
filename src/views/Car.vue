@@ -1,31 +1,31 @@
 <template>
   <div id="container" ref="container">
-    <a-input @change="selectColor" type="color" class="color-select"/>
+    <a-input @change="selectColor" type="color" class="color-select" />
   </div>
-  <Mask :show="maskShow" :percent="progress"/>
+  <Mask :show="maskShow" :percent="progress" />
 </template>
 <!--suppress JSVoidFunctionReturnValueUsed -->
 <script setup>
 import * as THREE from "three";
-import {CubeTextureLoader, LightProbe} from "three";
+import { CubeTextureLoader, LightProbe } from "three";
 import RendererTemplate from "../utils/RendererTemplate";
-import {onMounted, ref} from "vue";
-import {GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader";
-import {DRACOLoader} from "three/examples/jsm/loaders/DRACOLoader";
-import {LightProbeGenerator} from "three/examples/jsm/lights/LightProbeGenerator";
-import {RGBELoader} from "three/examples/jsm/loaders/RGBELoader";
+import { onMounted, ref } from "vue";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader";
+import { LightProbeGenerator } from "three/examples/jsm/lights/LightProbeGenerator";
+import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader";
 
-import Mask from './Mask.vue'
+import Mask from "../components/Mask.vue";
 
-let maskShow = ref(true)
-let progress = ref(0)
+let maskShow = ref(true);
+let progress = ref(0);
 let template, pointLight;
 const container = ref(null);
 const loader = new GLTFLoader();
 //使用draco压缩
 let dracoLoader = new DRACOLoader();
 dracoLoader.setDecoderPath("./draco/gltf/"); // 设置public下的解码路径，注意最后面的/
-dracoLoader.setDecoderConfig({type: "js"});
+dracoLoader.setDecoderConfig({ type: "js" });
 dracoLoader.preload();
 loader.setDRACOLoader(dracoLoader);
 
@@ -36,16 +36,16 @@ loader.setDRACOLoader(dracoLoader);
 const loadFile = (url) => {
   return new Promise((resolve, reject) => {
     loader.load(
-        url,
-        (gltf) => {
-          resolve(gltf);
-        },
-        ({loaded, total}) => {
-          progress.value = Math.abs((loaded / total) * 100)
-        },
-        (err) => {
-          reject(err);
-        }
+      url,
+      (gltf) => {
+        resolve(gltf);
+      },
+      ({ loaded, total }) => {
+        progress.value = Math.abs((loaded / total) * 100);
+      },
+      (err) => {
+        reject(err);
+      }
     );
   });
 };
@@ -123,20 +123,20 @@ const addLightProbe = () => {
     // const gltf = await loadFile('model/Audi/scene.gltf')
 
     new RGBELoader()
-        .setPath("texture/hdr/")
-        .load("royal_esplanade_4k.hdr", async function (texture) {
-          texture.mapping = THREE.EquirectangularReflectionMapping;
-          template.scene.background = texture;
-          template.scene.environment = texture;
-          template.render();
+      .setPath("texture/hdr/")
+      .load("royal_esplanade_4k.hdr", async function (texture) {
+        texture.mapping = THREE.EquirectangularReflectionMapping;
+        template.scene.background = texture;
+        template.scene.environment = texture;
+        template.render();
 
-          // model
-          const gltf = await loadFile("model/Audi/scene.gltf");
-          maskShow.value = false //关闭遮罩层
-          gltf.scene.scale.set(0.1, 0.1, 0.1);
-          template.scene.add(gltf.scene);
-          template.render();
-        });
+        // model
+        const gltf = await loadFile("model/Audi/scene.gltf");
+        maskShow.value = false; //关闭遮罩层
+        gltf.scene.scale.set(0.1, 0.1, 0.1);
+        template.scene.add(gltf.scene);
+        template.render();
+      });
     // const gltf = await loadFile('model/Audi/scene.gltf')
     // let trex = gltf.scene
     // trex.scale.set(0.05, 0.05, 0.05);
@@ -174,9 +174,9 @@ const initLight = () => {
   pointLight.shadow.mapSize.width = 2048; //阴影贴图宽度设置为2048像素
   pointLight.shadow.mapSize.height = 2048; //阴影贴图高度设置为2048像素
   const pointLightHelper = new THREE.PointLightHelper(
-      pointLight,
-      500,
-      0xff0000
+    pointLight,
+    500,
+    0xff0000
   );
   template.scene.add(pointLightHelper);
   template.scene.add(pointLight);

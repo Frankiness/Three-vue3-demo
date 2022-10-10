@@ -39,8 +39,8 @@ const init = () => {
   let spotLight = new THREE.SpotLight(0xffffff);
   spotLight.position.set(10, 80, 10);
   spotLight.castShadow = true;
-  spotLight.shadow.mapSize.width = 2048; //阴影贴图宽度设置为2048像素
-  spotLight.shadow.mapSize.height = 2048; //阴影贴图高度设置为2048像素
+  spotLight.shadow.mapSize.width = 2048 * 2; //阴影贴图宽度设置为2048像素（数值过大会卡顿）
+  spotLight.shadow.mapSize.height = 2048 * 2; //阴影贴图高度设置为2048像素
   const spotLightHelper = new THREE.SpotLightHelper(spotLight, 50, 0xff0000);
   scene.add(spotLightHelper);
   scene.add(spotLight);
