@@ -45,13 +45,13 @@ const DIRECTIONAL_POSITION_Z = 50;
 const DIRECTIONAL_CAST_SHADOW = true;
 
 // point light setting
-const POINT_LIGHT_COLOR = 0xffffff;
+const POINT_LIGHT_COLOR = 0xf5f5f5;
 const POINT_LIGHT_POSITION_X = 0;
 const POINT_LIGHT_POSITION_Y = 3000;
 const POINT_LIGHT_POSITION_Z = 3000;
 
 // renderer setting  //0c1e2a
-const RENDERER_BACKGROUND_COLOR = 0xf0f8ff;
+const RENDERER_BACKGROUND_COLOR = 0x434343; //空间背景颜色
 const RENDERER_ALPHA = 1; // 0~1
 
 // orbitControls
@@ -79,7 +79,6 @@ function createPerspectiveCamera(w, h, x, y, z) {
 }
 
 // 正交相机
-// eslint-disable-next-line no-unused-vars
 function createOrthographicCamera(x, y, z) {
   const camera = new THREE.OrthographicCamera(
     ORTHOGRAPHIC_CAMERA_LEFT,
@@ -121,7 +120,6 @@ function createDirectionalLight() {
 }
 
 // 平行光投影辅助线
-// eslint-disable-next-line no-unused-vars
 function createDirectionalLightHelper(directionalLight) {
   return new THREE.CameraHelper(directionalLight.shadow.camera);
 }
@@ -295,7 +293,7 @@ export class Web3DRenderer {
 
     this.scene.add(createAxes());
 
-    this.scene.add(createGridHelper());
+    // this.scene.add(createGridHelper());
 
     // 后期
     // 组合器composer

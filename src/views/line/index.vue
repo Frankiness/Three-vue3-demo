@@ -22,7 +22,7 @@ const lineData = [
       z: 202,
     },
     range: 120,
-    height: 100,
+    height: 500,
     color: "#ff0000",
     speed: 1,
     size: 10,

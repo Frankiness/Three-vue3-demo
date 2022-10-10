@@ -93,7 +93,7 @@ export function flyLine(option) {
                 size *= uIndex;
                 vOpacity = 1.0;
             } else {
-                vOpacity = 0.0;
+                vOpacity = 0.0; // 线条其他部分透明度
             }
 
             // 顶点着色器计算后的Position

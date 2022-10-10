@@ -6,6 +6,7 @@
 import * as THREE from "three";
 import { onMounted, ref } from "vue";
 import { Web3DRenderer } from "../../utils/Web3DRenderer";
+import { Radar } from "./index";
 
 //雷达波位置参数
 const radarData = [
