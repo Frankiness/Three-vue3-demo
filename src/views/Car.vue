@@ -8,7 +8,7 @@
 <script setup>
 import * as THREE from "three";
 import { CubeTextureLoader, LightProbe } from "three";
-import RendererTemplate from "../utils/RendererTemplate";
+import { Web3DRenderer } from "../utils/Web3DRenderer";
 import { onMounted, ref } from "vue";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader";
@@ -19,7 +19,7 @@ import Mask from "../components/Mask.vue";
 
 let maskShow = ref(true);
 let progress = ref(0);
-let template, pointLight;
+let web3d, pointLight;
 const container = ref(null);
 const loader = new GLTFLoader();
 //使用draco压缩
@@ -53,13 +53,19 @@ const loadFile = (url) => {
  * 初始化Scene
  */
 const initScene = async () => {
-  template = new RendererTemplate(container._value);
-  template.init();
+  web3d = new Web3DRenderer(container.value);
+  web3d.setCameraPosition({ x: 0, y: 0, z: 30 });
+
+  const render = () => {
+    requestAnimationFrame(render);
+    web3d.renderer.render(web3d.scene, web3d.camera);
+  };
+  render();
+  // 加载建筑模型
   // const house = await loadFile("model/Scene/scene.gltf");
   // house.scene.scale.set(10, 10, 10);
   // house.scene.position.set(0, 28, 0);
-
-  // template.scene.add(house.scene)
+  // web3d.scene.add(house.scene)
   addLightProbe();
   // initLight()
 };
@@ -71,7 +77,7 @@ const selectColor = (e) => {
 //设置车身颜色
 const setCarColor = (color) => {
   const currentColor = color;
-  template.scene.traverse((child) => {
+  web3d.scene.traverse((child) => {
     if (child.isMesh) {
       if (child.name.includes("Body_Paint")) {
         child.material.color.set(currentColor);
@@ -82,7 +88,7 @@ const setCarColor = (color) => {
 //拆解模型
 const dismantleModel = () => {
   let r = 60;
-  template.scene.traverse((child) => {
+  web3d.scene.traverse((child) => {
     if (child.isMesh) {
       child.fromPosition = [
         child.position.x,
@@ -113,11 +119,11 @@ const urls = genCubeUrls("texture/pisa/", ".png");
 // 光探针
 const addLightProbe = () => {
   let lightProbe = new LightProbe();
-  template.scene.add(lightProbe);
+  web3d.scene.add(lightProbe);
   new CubeTextureLoader().load(urls, async function (cubeTexture) {
     cubeTexture.encoding = THREE.sRGBEncoding;
 
-    // template.scene.background = cubeTexture; // 添加至场景中
+    // web3d.scene.background = cubeTexture; // 添加至场景中
     lightProbe.copy(LightProbeGenerator.fromCubeTexture(cubeTexture));
 
     // const gltf = await loadFile('model/Audi/scene.gltf')
@@ -126,16 +132,16 @@ const addLightProbe = () => {
       .setPath("texture/hdr/")
       .load("royal_esplanade_4k.hdr", async function (texture) {
         texture.mapping = THREE.EquirectangularReflectionMapping;
-        template.scene.background = texture;
-        template.scene.environment = texture;
-        template.render();
+        web3d.scene.background = texture;
+        web3d.scene.environment = texture;
+        // web3d.render();
 
         // model
         const gltf = await loadFile("model/Audi/scene.gltf");
         maskShow.value = false; //关闭遮罩层
         gltf.scene.scale.set(0.1, 0.1, 0.1);
-        template.scene.add(gltf.scene);
-        template.render();
+        web3d.scene.add(gltf.scene);
+        // web3d.render();
       });
     // const gltf = await loadFile('model/Audi/scene.gltf')
     // let trex = gltf.scene
@@ -164,7 +170,7 @@ const addLightProbe = () => {
     //     child.material.emissiveMap = child.material.map;
     //   }
     // });
-    // template.scene.add(gltf.scene);
+    // web3d.scene.add(gltf.scene);
   });
 };
 const initLight = () => {
@@ -178,8 +184,8 @@ const initLight = () => {
     500,
     0xff0000
   );
-  template.scene.add(pointLightHelper);
-  template.scene.add(pointLight);
+  web3d.scene.add(pointLightHelper);
+  web3d.scene.add(pointLight);
 };
 
 onMounted(() => {

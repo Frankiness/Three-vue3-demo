@@ -18,7 +18,7 @@ const PERSPECTIVE_CAMERA_POSITION_X = 1500;
 const PERSPECTIVE_CAMERA_POSITION_Y = 1500;
 const PERSPECTIVE_CAMERA_POSITION_Z = 1500;
 const PERSPECTIVE_CAMERA_FOV = 45;
-const PERSPECTIVE_CAMERA_NEAR = 50;
+const PERSPECTIVE_CAMERA_NEAR = 10;
 const PERSPECTIVE_CAMERA_FAR = 20000;
 
 // Orthographic Camera settting
@@ -55,9 +55,8 @@ const RENDERER_BACKGROUND_COLOR = 0x434343; //空间背景颜色
 const RENDERER_ALPHA = 1; // 0~1
 
 // orbitControls
-
-const MIN_DISTANCE = 500;
-const MAX_DISTANCE = 10000;
+const MIN_DISTANCE = 100; // 缩放最小距离
+const MAX_DISTANCE = 10000; // 缩放最大距离
 
 let timer = null;
 
