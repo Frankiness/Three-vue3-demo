@@ -357,6 +357,10 @@ export class Web3DRenderer {
   showStatus() {
     this.stats = new Stats();
     this.stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
+    // 设置监视器位置
+    this.stats.domElement.style.position = 'absolute';
+    this.stats.domElement.style.left = '215px';
+    this.stats.domElement.style.top = '15px';
     document.body.appendChild(this.stats.dom);
     return this;
   }
