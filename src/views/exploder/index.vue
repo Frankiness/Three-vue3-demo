@@ -105,7 +105,7 @@ onMounted(() => {
 }
 .slider {
   position: absolute;
-  left: 10px;
+  left: 100px;
   top: 30px;
 }
 </style>
