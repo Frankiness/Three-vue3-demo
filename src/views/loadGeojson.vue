@@ -3,10 +3,10 @@
 </template>
 
 <script setup>
-import { Web3DRenderer } from "../utils/Web3DRenderer";
-import * as THREE from "three";
-import * as d3 from "d3";
-import { onMounted, ref } from "vue";
+import { Web3DRenderer } from '../utils/Web3DRenderer';
+import * as THREE from 'three';
+import * as d3 from 'd3';
+import { onMounted, ref } from 'vue';
 
 let web3d = ref(null);
 const container = ref(null);
@@ -53,7 +53,7 @@ const lineDraw = (polygon, color) => {
 // 控制 颜色和粒子大小
 const params = {
   pointSize: 2.0,
-  pointColor: "#4ec0e9",
+  pointColor: '#4ec0e9',
 };
 
 const vertexShader = `
@@ -103,7 +103,7 @@ const points = new THREE.Points(geometry, material);
  * 加载json文件
  */
 const loadJSON = () => {
-  loader.load("js/China-line.json", (data) => {
+  loader.load('js/China-line.json', (data) => {
     const jsonData = JSON.parse(data);
     drawMap(jsonData);
     drawLine(jsonData);
@@ -135,8 +135,8 @@ const drawMap = (jsonData) => {
         }
         const vertices = new Float32Array(positions);
         lineGeometry.setAttribute(
-          "position",
-          new THREE.Float32BufferAttribute(vertices, 3)
+          'position',
+          new THREE.Float32BufferAttribute(vertices, 3),
         );
         lineGeometry.computeBoundingSphere();
         const extrudeSettings = {
@@ -146,12 +146,12 @@ const drawMap = (jsonData) => {
 
         const geometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);
         const material = new THREE.MeshBasicMaterial({
-          color: "#02A1E2",
+          color: '#02A1E2',
           transparent: true,
           opacity: 0.6,
         });
         const material1 = new THREE.MeshBasicMaterial({
-          color: "#3480C4",
+          color: '#3480C4',
           transparent: true,
           opacity: 0.5,
         });
@@ -181,10 +181,10 @@ const drawLine = (jsonData) => {
 
   positions = new Float32Array(lines.flat(1));
   // 设置顶点
-  geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+  geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
   // 设置 粒子透明度为 0
   opacitys = new Float32Array(positions.length).map(() => 0);
-  geometry.setAttribute("aOpacity", new THREE.BufferAttribute(opacitys, 1));
+  geometry.setAttribute('aOpacity', new THREE.BufferAttribute(opacitys, 1));
 
   web3d.scene.add(province);
 };

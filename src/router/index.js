@@ -35,6 +35,11 @@ const routes = [
     name: "fly-line",
     component: () => import("../views/line/index.vue"),
   },
+  {
+    path: "/exploder",
+    name: "exploder",
+    component: () => import("../views/exploder/index.vue"),
+  },
 ];
 
 const router = createRouter({

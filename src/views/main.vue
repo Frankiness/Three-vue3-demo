@@ -26,6 +26,9 @@
         <a-menu-item key="fly-line">
           <span>飞线</span>
         </a-menu-item>
+        <a-menu-item key="exploder">
+          <span>模型爆炸拆解</span>
+        </a-menu-item>
       </a-menu>
     </a-layout-sider>
     <a-layout>

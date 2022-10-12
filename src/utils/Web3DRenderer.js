@@ -1,17 +1,17 @@
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js";
-import { FBXLoader } from "three/examples/jsm/loaders/FBXLoader.js";
-import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer.js";
-import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass.js";
-import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass.js";
-import { OutlinePass } from "three/examples/jsm/postprocessing/OutlinePass.js";
-import { FXAAShader } from "three/examples/jsm/shaders/FXAAShader.js";
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
+import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader.js';
+import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
+import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js';
+import { OutlinePass } from 'three/examples/jsm/postprocessing/OutlinePass.js';
+import { FXAAShader } from 'three/examples/jsm/shaders/FXAAShader.js';
 
 // import { TWEEN } from 'three/examples/jsm/libs/tween.module.min.js'
 // import { GUI } from "three/examples/jsm/libs/dat.gui.module.js";
-import Stats from "three/examples/jsm/libs/stats.module";
-import * as THREE from "three";
-const VERSION = "0.0.3";
+import Stats from 'three/examples/jsm/libs/stats.module';
+import * as THREE from 'three';
+const VERSION = '0.0.3';
 
 // Perspective camera  setting
 const PERSPECTIVE_CAMERA_POSITION_X = 1500;
@@ -51,7 +51,7 @@ const POINT_LIGHT_POSITION_Y = 3000;
 const POINT_LIGHT_POSITION_Z = 3000;
 
 // renderer setting  //0c1e2a
-const RENDERER_BACKGROUND_COLOR = 0x434343; //空间背景颜色
+const RENDERER_BACKGROUND_COLOR = 0x262626; //空间背景颜色
 const RENDERER_ALPHA = 1; // 0~1
 
 // orbitControls
@@ -71,7 +71,7 @@ function createPerspectiveCamera(w, h, x, y, z) {
     PERSPECTIVE_CAMERA_FOV,
     w / h,
     PERSPECTIVE_CAMERA_NEAR,
-    PERSPECTIVE_CAMERA_FAR
+    PERSPECTIVE_CAMERA_FAR,
   );
   camera.position.set(x, y, z);
   return camera;
@@ -85,7 +85,7 @@ function createOrthographicCamera(x, y, z) {
     ORTHOGRAPHIC_CAMERA_TOP,
     ORTHOGRAPHIC_CAMERA_BOTTOM,
     ORTHOGRAPHIC_CAMERA_NEAR,
-    ORTHOGRAPHIC_CAMERA_FAR
+    ORTHOGRAPHIC_CAMERA_FAR,
   );
   camera.position.set(x, y, z);
   camera.lookAt(0, 0, 0);
@@ -101,12 +101,12 @@ function createAmbientLight() {
 function createDirectionalLight() {
   const directionalLight = new THREE.DirectionalLight(
     DIRECTIONAL_LIGHT_COLOR,
-    DIRECTIONAL_LIGHT_INTENSITY
+    DIRECTIONAL_LIGHT_INTENSITY,
   );
   directionalLight.position.set(
     DIRECTIONAL_POSITION_X,
     DIRECTIONAL_POSITION_Y,
-    DIRECTIONAL_POSITION_Z
+    DIRECTIONAL_POSITION_Z,
   );
   directionalLight.castShadow = DIRECTIONAL_CAST_SHADOW;
   directionalLight.shadow.camera.far = 1000;
@@ -129,7 +129,7 @@ function createPointLight() {
   pointLight.position.set(
     POINT_LIGHT_POSITION_X,
     POINT_LIGHT_POSITION_Y,
-    POINT_LIGHT_POSITION_Z
+    POINT_LIGHT_POSITION_Z,
   );
   return pointLight;
 }
@@ -153,7 +153,7 @@ function createWebGLRenderer(element, w, h) {
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   renderer.outputEncoding = THREE.sRGBEncoding;
-  renderer.domElement.className = "renderer";
+  renderer.domElement.className = 'renderer';
   element.appendChild(renderer.domElement);
   return renderer;
 }
@@ -232,7 +232,7 @@ function createFXAA() {
 export class Web3DRenderer {
   constructor(element, config) {
     if (!element) {
-      throw new Error("Three need element container");
+      throw new Error('Three need element container');
     }
 
     this._version = VERSION;
@@ -240,15 +240,13 @@ export class Web3DRenderer {
     this.THREE = THREE;
     // this.TWEEN = TWEEN
 
-    this.perspective = "perspective";
+    this.perspective = 'perspective';
 
     this.width = element.clientWidth;
     this.height = element.clientHeight;
 
     if (this.width === 0 || this.height === 0) {
-      console.warn(
-        "The width or the height of canvas container is not available"
-      );
+      console.warn('The width or the height of canvas container is not available');
     }
 
     // 初始化场景
@@ -260,17 +258,17 @@ export class Web3DRenderer {
       this.height,
       PERSPECTIVE_CAMERA_POSITION_X,
       PERSPECTIVE_CAMERA_POSITION_Y,
-      PERSPECTIVE_CAMERA_POSITION_Z
+      PERSPECTIVE_CAMERA_POSITION_Z,
     );
-    this.camera.name = "camera";
+    this.camera.name = 'camera';
     this.camera.lookAt(0, 0, 0);
     // 初始化灯光
     this.ambientLight = createAmbientLight();
-    this.ambientLight.name = "ambientLight";
+    this.ambientLight.name = 'ambientLight';
     this.scene.add(this.ambientLight);
 
     this.directionalLight = createDirectionalLight();
-    this.directionalLight.name = "directionalLight";
+    this.directionalLight.name = 'directionalLight';
     this.scene.add(this.directionalLight);
 
     this.pointLight = createPointLight();
@@ -301,35 +299,21 @@ export class Web3DRenderer {
     this.renderPass = createRenderPass(this.scene, this.camera);
     this.composer.addPass(this.renderPass);
     // 轮廓
-    this.outline = createOutlinePass(
-      this.width,
-      this.height,
-      this.scene,
-      this.camera
-    );
+    this.outline = createOutlinePass(this.width, this.height, this.scene, this.camera);
     this.outline.edgeStrength = 3.0;
     this.outline.edgeGlow = 1.0;
     this.outline.edgeThickness = 1.0;
     this.outline.pulsePeriod = 3;
-    this.outline.visibleEdgeColor.set("#fbf85b");
-    this.outline.hiddenEdgeColor.set("#a49a35");
+    this.outline.visibleEdgeColor.set('#fbf85b');
+    this.outline.hiddenEdgeColor.set('#a49a35');
     this.composer.addPass(this.outline);
     // 抗锯齿
     this.effectFXAA = createFXAA();
-    this.effectFXAA.uniforms.resolution.value.set(
-      1 / this.width,
-      1 / this.height
-    );
+    this.effectFXAA.uniforms.resolution.value.set(1 / this.width, 1 / this.height);
     this.composer.addPass(this.effectFXAA);
 
-    window.addEventListener("resize", () => {
-      resize(
-        element,
-        this.camera,
-        this.renderer,
-        this.composer,
-        this.effectFXAA
-      );
+    window.addEventListener('resize', () => {
+      resize(element, this.camera, this.renderer, this.composer, this.effectFXAA);
     });
   }
   /**
@@ -341,11 +325,11 @@ export class Web3DRenderer {
     if (this.camera instanceof THREE.PerspectiveCamera) {
       this.camera = createOrthographicCamera(x, y, z);
       this.orbitControls = createOrbitControls(this.camera, this.renderer);
-      this.perspective = "orthographic";
+      this.perspective = 'orthographic';
     } else {
       this.camera = createPerspectiveCamera(this.width, this.height, x, y, z);
       this.orbitControls = createOrbitControls(this.camera, this.renderer);
-      this.perspective = "perspective";
+      this.perspective = 'perspective';
     }
   }
   /**

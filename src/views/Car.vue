@@ -6,16 +6,16 @@
 </template>
 <!--suppress JSVoidFunctionReturnValueUsed -->
 <script setup>
-import * as THREE from "three";
-import { CubeTextureLoader, LightProbe } from "three";
-import { Web3DRenderer } from "../utils/Web3DRenderer";
-import { onMounted, ref } from "vue";
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
-import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader";
-import { LightProbeGenerator } from "three/examples/jsm/lights/LightProbeGenerator";
-import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader";
+import * as THREE from 'three';
+import { CubeTextureLoader, LightProbe } from 'three';
+import { Web3DRenderer } from '../utils/Web3DRenderer';
+import { onMounted, ref } from 'vue';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader';
+import { LightProbeGenerator } from 'three/examples/jsm/lights/LightProbeGenerator';
+import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader';
 
-import Mask from "../components/Mask.vue";
+import Mask from '../components/Mask.vue';
 
 let maskShow = ref(true);
 let progress = ref(0);
@@ -24,8 +24,8 @@ const container = ref(null);
 const loader = new GLTFLoader();
 //使用draco压缩
 let dracoLoader = new DRACOLoader();
-dracoLoader.setDecoderPath("./draco/gltf/"); // 设置public下的解码路径，注意最后面的/
-dracoLoader.setDecoderConfig({ type: "js" });
+dracoLoader.setDecoderPath('./draco/gltf/'); // 设置public下的解码路径，注意最后面的/
+dracoLoader.setDecoderConfig({ type: 'js' });
 dracoLoader.preload();
 loader.setDRACOLoader(dracoLoader);
 
@@ -45,7 +45,7 @@ const loadFile = (url) => {
       },
       (err) => {
         reject(err);
-      }
+      },
     );
   });
 };
@@ -79,7 +79,7 @@ const setCarColor = (color) => {
   const currentColor = color;
   web3d.scene.traverse((child) => {
     if (child.isMesh) {
-      if (child.name.includes("Body_Paint")) {
+      if (child.name.includes('Body_Paint')) {
         child.material.color.set(currentColor);
       }
     }
@@ -90,16 +90,8 @@ const dismantleModel = () => {
   let r = 60;
   web3d.scene.traverse((child) => {
     if (child.isMesh) {
-      child.fromPosition = [
-        child.position.x,
-        child.position.y,
-        child.position.z,
-      ];
-      child.toPosition = [
-        Math.random() * r,
-        Math.random() * r,
-        Math.random() * r,
-      ];
+      child.fromPosition = [child.position.x, child.position.y, child.position.z];
+      child.toPosition = [Math.random() * r, Math.random() * r, Math.random() * r];
     }
   });
 };
@@ -107,15 +99,15 @@ const dismantleModel = () => {
 // envmap
 const genCubeUrls = function (prefix, postfix) {
   return [
-    prefix + "px1" + postfix,
-    prefix + "nx1" + postfix,
-    prefix + "py1" + postfix,
-    prefix + "ny1" + postfix,
-    prefix + "pz1" + postfix,
-    prefix + "nz1" + postfix,
+    prefix + 'px1' + postfix,
+    prefix + 'nx1' + postfix,
+    prefix + 'py1' + postfix,
+    prefix + 'ny1' + postfix,
+    prefix + 'pz1' + postfix,
+    prefix + 'nz1' + postfix,
   ];
 };
-const urls = genCubeUrls("texture/pisa/", ".png");
+const urls = genCubeUrls('texture/pisa/', '.png');
 // 光探针
 const addLightProbe = () => {
   let lightProbe = new LightProbe();
@@ -129,15 +121,15 @@ const addLightProbe = () => {
     // const gltf = await loadFile('model/Audi/scene.gltf')
 
     new RGBELoader()
-      .setPath("texture/hdr/")
-      .load("royal_esplanade_4k.hdr", async function (texture) {
+      .setPath('texture/hdr/')
+      .load('royal_esplanade_4k.hdr', async function (texture) {
         texture.mapping = THREE.EquirectangularReflectionMapping;
         web3d.scene.background = texture;
         web3d.scene.environment = texture;
         // web3d.render();
 
         // model
-        const gltf = await loadFile("model/Audi/scene.gltf");
+        const gltf = await loadFile('model/Audi/scene.gltf');
         maskShow.value = false; //关闭遮罩层
         gltf.scene.scale.set(0.1, 0.1, 0.1);
         web3d.scene.add(gltf.scene);
@@ -179,11 +171,7 @@ const initLight = () => {
   pointLight.castShadow = true;
   pointLight.shadow.mapSize.width = 2048; //阴影贴图宽度设置为2048像素
   pointLight.shadow.mapSize.height = 2048; //阴影贴图高度设置为2048像素
-  const pointLightHelper = new THREE.PointLightHelper(
-    pointLight,
-    500,
-    0xff0000
-  );
+  const pointLightHelper = new THREE.PointLightHelper(pointLight, 500, 0xff0000);
   web3d.scene.add(pointLightHelper);
   web3d.scene.add(pointLight);
 };
