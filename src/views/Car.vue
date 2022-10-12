@@ -4,24 +4,23 @@
   </div>
   <Mask :show="maskShow" :percent="progress" />
 </template>
-<!--suppress JSVoidFunctionReturnValueUsed -->
+
 <script setup>
 import * as THREE from 'three';
-import { CubeTextureLoader, LightProbe } from 'three';
 import { Web3DRenderer } from '../utils/Web3DRenderer';
 import { onMounted, ref } from 'vue';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader';
-import { LightProbeGenerator } from 'three/examples/jsm/lights/LightProbeGenerator';
 import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader';
 
 import Mask from '../components/Mask.vue';
 
 let maskShow = ref(true);
 let progress = ref(0);
-let web3d, pointLight;
+let web3d;
 const container = ref(null);
 const loader = new GLTFLoader();
+
 //使用draco压缩
 let dracoLoader = new DRACOLoader();
 dracoLoader.setDecoderPath('./draco/gltf/'); // 设置public下的解码路径，注意最后面的/
@@ -55,19 +54,12 @@ const loadFile = (url) => {
 const initScene = async () => {
   web3d = new Web3DRenderer(container.value);
   web3d.setCameraPosition({ x: 0, y: 0, z: 30 });
-
+  createHDR();
   const render = () => {
     requestAnimationFrame(render);
     web3d.renderer.render(web3d.scene, web3d.camera);
   };
   render();
-  // 加载建筑模型
-  // const house = await loadFile("model/Scene/scene.gltf");
-  // house.scene.scale.set(10, 10, 10);
-  // house.scene.position.set(0, 28, 0);
-  // web3d.scene.add(house.scene)
-  addLightProbe();
-  // initLight()
 };
 //颜色选择
 const selectColor = (e) => {
@@ -85,95 +77,22 @@ const setCarColor = (color) => {
     }
   });
 };
-//拆解模型
-const dismantleModel = () => {
-  let r = 60;
-  web3d.scene.traverse((child) => {
-    if (child.isMesh) {
-      child.fromPosition = [child.position.x, child.position.y, child.position.z];
-      child.toPosition = [Math.random() * r, Math.random() * r, Math.random() * r];
-    }
-  });
-};
 
-// envmap
-const genCubeUrls = function (prefix, postfix) {
-  return [
-    prefix + 'px1' + postfix,
-    prefix + 'nx1' + postfix,
-    prefix + 'py1' + postfix,
-    prefix + 'ny1' + postfix,
-    prefix + 'pz1' + postfix,
-    prefix + 'nz1' + postfix,
-  ];
-};
-const urls = genCubeUrls('texture/pisa/', '.png');
 // 光探针
-const addLightProbe = () => {
-  let lightProbe = new LightProbe();
-  web3d.scene.add(lightProbe);
-  new CubeTextureLoader().load(urls, async function (cubeTexture) {
-    cubeTexture.encoding = THREE.sRGBEncoding;
+const createHDR = () => {
+  new RGBELoader()
+    .setPath('texture/hdr/')
+    .load('royal_esplanade_4k.hdr', async function (texture) {
+      texture.mapping = THREE.EquirectangularReflectionMapping;
+      web3d.scene.background = texture;
+      web3d.scene.environment = texture;
 
-    // web3d.scene.background = cubeTexture; // 添加至场景中
-    lightProbe.copy(LightProbeGenerator.fromCubeTexture(cubeTexture));
-
-    // const gltf = await loadFile('model/Audi/scene.gltf')
-
-    new RGBELoader()
-      .setPath('texture/hdr/')
-      .load('royal_esplanade_4k.hdr', async function (texture) {
-        texture.mapping = THREE.EquirectangularReflectionMapping;
-        web3d.scene.background = texture;
-        web3d.scene.environment = texture;
-        // web3d.render();
-
-        // model
-        const gltf = await loadFile('model/Audi/scene.gltf');
-        maskShow.value = false; //关闭遮罩层
-        gltf.scene.scale.set(0.1, 0.1, 0.1);
-        web3d.scene.add(gltf.scene);
-        // web3d.render();
-      });
-    // const gltf = await loadFile('model/Audi/scene.gltf')
-    // let trex = gltf.scene
-    // trex.scale.set(0.05, 0.05, 0.05);
-    // trex.position.set(-10, 9, -50);
-    // trex.rotation.set(0, Math.PI / 1.2, 0);
-    // trex.traverse((node) => {
-    //   if (node.isMesh) {
-    //     node.castShadow = true;
-    //     node.receiveShadow = true
-    //   }
-    // });
-    //
-    // const material = new THREE.MeshStandardMaterial({
-    //   color: 0xffffff,
-    //   metalness: 0,
-    //   roughness: 0,
-    //   envMap: cubeTexture,
-    //   envMapIntensity: 1,
-    // });
-    //
-    // // mesh
-    // trex.traverse(function (child) {
-    //   if (child.name.includes('Body_Paint')) {
-    //     child.material = material;
-    //     child.material.emissiveMap = child.material.map;
-    //   }
-    // });
-    // web3d.scene.add(gltf.scene);
-  });
-};
-const initLight = () => {
-  pointLight = new THREE.PointLight(0xffffff, 0.2);
-  pointLight.position.set(-21, 50, -20);
-  pointLight.castShadow = true;
-  pointLight.shadow.mapSize.width = 2048; //阴影贴图宽度设置为2048像素
-  pointLight.shadow.mapSize.height = 2048; //阴影贴图高度设置为2048像素
-  const pointLightHelper = new THREE.PointLightHelper(pointLight, 500, 0xff0000);
-  web3d.scene.add(pointLightHelper);
-  web3d.scene.add(pointLight);
+      // model
+      const gltf = await loadFile('model/Audi/scene.gltf');
+      maskShow.value = false; //关闭遮罩层
+      gltf.scene.scale.set(0.1, 0.1, 0.1);
+      web3d.scene.add(gltf.scene);
+    });
 };
 
 onMounted(() => {

@@ -9,7 +9,7 @@
         @click="handleMuneClick"
       >
         <a-menu-item key="display-car">
-          <span>汽车展厅</span>
+          <span>改变模型材质颜色</span>
         </a-menu-item>
         <a-menu-item key="shadow">
           <span>投影</span>
