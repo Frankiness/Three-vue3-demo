@@ -3,7 +3,7 @@
 </template>
 
 <script setup>
-import { Web3DRenderer } from '../utils/Web3DRenderer';
+import { Web3DRenderer } from '../../utils/Web3DRenderer';
 import * as THREE from 'three';
 import * as d3 from 'd3';
 import { onMounted, ref } from 'vue';
@@ -191,7 +191,7 @@ const drawLine = (jsonData) => {
 
 const init = () => {
   web3d = new Web3DRenderer(container.value);
-  web3d.setCameraPosition({ x: 0, y: 0, z: 30 });
+  web3d.setCameraPosition({ x: 0, y: 0, z: 600 });
   web3d.showStatus(); // 显示帧数
 
   const render = () => {

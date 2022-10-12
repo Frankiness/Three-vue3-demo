@@ -14,7 +14,7 @@
         <a-menu-item key="shadow">
           <span>投影</span>
         </a-menu-item>
-        <a-menu-item key="map">
+        <a-menu-item key="geojson">
           <span>Geojson转三维</span>
         </a-menu-item>
         <a-menu-item key="radar">
@@ -41,11 +41,11 @@
   </a-layout>
 </template>
 <script setup>
-import { ref } from "vue";
-import { useRouter } from "vue-router";
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 
 const router = useRouter();
-let selectedKeys = ref(["display-car"]);
+let selectedKeys = ref(['display-car']);
 const handleMuneClick = (e) => {
   router.push(e.key);
 };

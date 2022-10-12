@@ -24,7 +24,7 @@ let markContainer = ref(null);
 // 初始化场景
 const init = () => {
   web3d = new Web3DRenderer(markContainer.value);
-  web3d.setCameraPosition({ x: 800, y: 800, z: 800 });
+  web3d.setCameraPosition({ x: 800, y: 500, z: 100 });
   const render = () => {
     requestAnimationFrame(render);
     web3d.renderer.render(web3d.scene, web3d.camera);
