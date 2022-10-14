@@ -8,12 +8,12 @@ const routes = [
   {
     path: '/display-car',
     name: 'display-car',
-    component: () => import('../views/Car.vue'),
+    component: () => import('../views/displayCar/index.vue'),
   },
   {
     path: '/shadow',
     name: 'shadow',
-    component: () => import('../views/Shadow.vue'),
+    component: () => import('../views/shadow/index.vue'),
   },
   {
     path: '/geojson',
@@ -44,6 +44,11 @@ const routes = [
     path: '/indexedDB',
     name: 'indexedDB',
     component: () => import('../views/indexedDB/index.vue'),
+  },
+  {
+    path: '/clipping',
+    name: 'clipping',
+    component: () => import('../views/clipping/index.vue'),
   },
 ];
 

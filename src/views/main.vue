@@ -32,6 +32,9 @@
         <a-menu-item key="indexedDB">
           <span>IndexedDB缓存模型</span>
         </a-menu-item>
+        <a-menu-item key="clipping">
+          <span>物体剪裁</span>
+        </a-menu-item>
       </a-menu>
     </a-layout-sider>
     <a-layout>
