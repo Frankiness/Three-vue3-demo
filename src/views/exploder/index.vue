@@ -3,7 +3,7 @@
     <input
       type="range"
       min="0"
-      max="1"
+      max="2"
       step="0.05"
       value="0"
       class="slider"

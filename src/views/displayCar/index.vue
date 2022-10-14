@@ -1,18 +1,16 @@
 <template>
-  <div id="container" ref="container">
-    <a-input @change="selectColor" type="color" class="color-select" />
-  </div>
+  <div id="container" ref="container"></div>
   <Mask :show="maskShow" :percent="progress" />
 </template>
 
 <script setup>
 import * as THREE from 'three';
 import { Web3DRenderer } from '../../utils/Web3DRenderer';
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, onBeforeUnmount } from 'vue';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader';
 import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader';
-
+import * as dat from 'dat.gui';
 import Mask from '../../components/Mask.vue';
 
 let maskShow = ref(true);
@@ -20,6 +18,7 @@ let progress = ref(0);
 let web3d;
 const container = ref(null);
 const loader = new GLTFLoader();
+const gui = new dat.GUI();
 
 //使用draco压缩
 let dracoLoader = new DRACOLoader();
@@ -61,9 +60,14 @@ const initScene = async () => {
   };
   render();
 };
-//颜色选择
-const selectColor = (e) => {
-  setCarColor(e.target._value);
+
+const createGUI = () => {
+  const control = {
+    color: 0x000000,
+  };
+  gui.addColor(control, 'color').onChange((v) => {
+    setCarColor(v);
+  });
 };
 
 //设置车身颜色
@@ -97,6 +101,10 @@ const createHDR = () => {
 
 onMounted(() => {
   initScene();
+  createGUI();
+});
+onBeforeUnmount(() => {
+  gui.destroy();
 });
 </script>
 

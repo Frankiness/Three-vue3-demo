@@ -276,8 +276,7 @@ export class Web3DRenderer {
     // 初始化渲染器
     this.renderer = createWebGLRenderer(element, this.width, this.height);
     this.renderer.render(this.scene, this.camera);
-    const Empty = Object.freeze( [] );
-    this.renderer.clippingPlanes = Empty; // GUI sets it to globalPlanes
+    
     this.renderer.localClippingEnabled = true;
 
     // 添加环境

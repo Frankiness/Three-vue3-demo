@@ -1,25 +1,34 @@
 <template>
-  <div id="container" ref="container"></div>
+  <div id="container" ref="container">
+    <input
+      type="range"
+      min="0"
+      max="100"
+      step="1"
+      value="0"
+      class="slider"
+      id="myRange"
+      style="position: absolute; top: 0; width: 350px"
+    />
+  </div>
 </template>
 
 <script setup>
 //打开数据库
-import { onMounted, ref } from 'vue';
+import { onMounted, ref,onBeforeUnmount } from 'vue';
 import { Web3DRenderer } from '../../utils/Web3DRenderer';
 import * as THREE from 'three';
-import * as dat from 'dat.gui';
-import { func } from 'vue-types';
+
 let container = ref(null);
 let web3d = null;
+
 //初始化场景
 const initScene = async () => {
   web3d = new Web3DRenderer(container.value);
   web3d.setCameraPosition({ x: 300, y: 500, z: 1000 });
-  web3d.showStatus();
   const render = () => {
     requestAnimationFrame(render);
     web3d.renderer.render(web3d.scene, web3d.camera);
-    web3d.stats.update();
   };
   render();
 };
@@ -38,19 +47,13 @@ const initGeometry = () => {
   });
   const object = new THREE.Mesh(geometry, material);
   web3d.scene.add(object);
-  localPlane.constant = 0;
-  createGUI(localPlane);
-};
 
-const createGUI = (localPlane) => {
-  const gui = new dat.GUI();
-  const control = {
-    平面剪裁: 0,
-  };
-  gui.add(control, '平面剪裁', 0, 100).onChange((v) => {
-    localPlane.constant = v;
+  document.querySelector('#myRange').addEventListener('input', function (evt) {
+    localPlane.constant = this.value
   });
 };
+
+
 
 onMounted(() => {
   initScene();
@@ -62,5 +65,11 @@ onMounted(() => {
 #container {
   width: 100%;
   height: 100%;
+  position: relative;
+}
+.slider {
+  position: absolute;
+  left: 100px;
+  top: 30px;
 }
 </style>
