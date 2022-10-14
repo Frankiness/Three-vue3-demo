@@ -192,7 +192,6 @@ const drawLine = (jsonData) => {
 const init = () => {
   web3d = new Web3DRenderer(container.value);
   web3d.setCameraPosition({ x: 0, y: 0, z: 600 });
-  web3d.showStatus(); // 显示帧数
 
   const render = () => {
     if (points && geometry.attributes.position) {
@@ -207,7 +206,6 @@ const init = () => {
       geometry.attributes.aOpacity.needsUpdate = true;
     }
     requestAnimationFrame(render);
-    web3d.stats.update();
     web3d.renderer.render(web3d.scene, web3d.camera);
   };
   render();

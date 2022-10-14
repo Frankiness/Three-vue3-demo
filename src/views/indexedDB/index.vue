@@ -14,11 +14,9 @@ let web3d = null;
 const initScene = async () => {
   web3d = new Web3DRenderer(container.value);
   web3d.setCameraPosition({ x: 300, y: 500, z: 1000 });
-  web3d.showStatus();
   const render = () => {
     requestAnimationFrame(render);
     web3d.renderer.render(web3d.scene, web3d.camera);
-    web3d.stats.update();
   };
   render();
 };
