@@ -1,6 +1,5 @@
-import * as THREE from 'three'
-import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
-import {TWEEN} from "three/examples/jsm/libs/tween.module.min";
+import * as THREE from "three";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import Stats from "three/examples/jsm/libs/stats.module";
 
 export default class RendererTemplate {
@@ -13,28 +12,25 @@ export default class RendererTemplate {
       near: 1,
       far: 100000,
     };
-    this.cameraPostion = new THREE.Vector3(10, 10, 10);
-    this.cameraLookAt = new THREE.Vector3(0, 0, 0);
-    this.rendererColor = new THREE.Color(0xF0F8FF);
+    this.cameraPostion = new THREE.Vector3(-7.5, 35, -158);
+    this.cameraLookAt = new THREE.Vector3(-7, 40, -150);
+    this.rendererColor = new THREE.Color(0xf0f8ff);
     this.rendererWidth = this.el.clientWidth;
     this.rendererHeight = this.el.clientHeight;
-
-    this.p1 = {x: 10, y: 20, z: 100}
+    this.camera = null;
   }
 
-  initPerspectiveCamera() {
+  initPerspectiveCamera(cameraPos = this.cameraPostion) {
     //初始化相机，这里是透视相机
-    const camera = new THREE.PerspectiveCamera(
-        this.PCamera.fov,
-        this.PCamera.aspect,
-        this.PCamera.near,
-        this.PCamera.far
+    this.camera = new THREE.PerspectiveCamera(
+      this.PCamera.fov,
+      this.PCamera.aspect,
+      this.PCamera.near,
+      this.PCamera.far
     );
-    camera.position.copy(this.cameraPostion);
-    camera.lookAt(this.cameraLookAt);
-    this.camera = camera;
-
-    this.scene.add(camera);
+    this.camera.position.copy(cameraPos);
+    this.camera.lookAt(this.cameraLookAt);
+    this.scene.add(this.camera);
   }
 
   initScene() {
@@ -47,106 +43,73 @@ export default class RendererTemplate {
     const renderer = new THREE.WebGLRenderer();
     renderer.setClearColor(this.rendererColor);
     renderer.setSize(this.rendererWidth, this.rendererHeight);
+    renderer.toneMapping = THREE.NoToneMapping;
+    renderer.outputEncoding = THREE.sRGBEncoding;
+    renderer.shadowMap.enabled = true; //阴影投射
     this.el.appendChild(renderer.domElement);
     this.renderer = renderer;
-    this.controls = new OrbitControls(this.camera, renderer.domElement)//轨迹控制
-    this.controls.autoRotate = true
+    this.controls = new OrbitControls(this.camera, renderer.domElement); //轨迹控制
+    this.controls.enableDamping = true; //鼠标拖动视角延迟效果
   }
 
-  init() {
+  render() {
+    this.renderer.render(this.scene, this.camera);
+  }
+  /**
+   * 初始化
+   * @param {Vector3} cameraPos 相机位置
+   * @param {Funtion} callback animate函数回调
+   */
+  init(cameraPos, callback) {
+    const clock = new THREE.Clock();
     const animate = () => {
+      const dt = clock.getDelta();
+      callback && callback(dt);
       requestAnimationFrame(animate);
-      this.renderer.render(this.scene, this.camera);
+      this.render();
       // this.stats.update()
-      // this.texture.offset.x += 0.01;
-
-      // 放在 TWEEN.js未加载完成导致报错
-      try {
-        TWEEN.update();
-      } catch (error) {
-        console.log(error)
-      }
-    }
+    };
 
     this.initScene();
-    this.initPerspectiveCamera();
+    this.initPerspectiveCamera(cameraPos);
     this.initRenderer();
-    this.initFloor()
-    this.addAxes()
-    this.initLight()
+    // this.initFloor();
+    this.addAxes();
+    this.initLight();
     // this.addStats()
-    this.flyTo()
-    // this.randomGenerationGeometry() //加载点云
     // this.flowTexture() //地板贴图
-    animate()
-    let _this = this
-    // const addRaycaster = (event) => {
-    //   let mouse = new THREE.Vector2();
-    //   let x, y;
-    //   if (event.changedTouches) {
-    //     x = event.changedTouches[0].pageX;
-    //     y = event.changedTouches[0].pageY;
-    //   } else {
-    //     x = event.clientX;
-    //     y = event.clientY;
-    //   }
-    //   mouse.x = (x / window.innerWidth) * 2 - 1;
-    //   mouse.y = -(y / window.innerHeight) * 2 + 1;
-    //   let raycaster = new THREE.Raycaster();//拾取射线
-    //   raycaster.setFromCamera(mouse, _this.camera);
-    //   const intersection = raycaster.intersectObject(_this.mesh);
-    //   if (intersection.length > 0) {
-    //     const instanceId = intersection[0].instanceId;
-    //     _this.mesh.setColorAt(instanceId, new THREE.Color(255, 255, 255));
-    //     _this.mesh.instanceColor.needsUpdate = true;
-    //   }
-    // }
-    // document.addEventListener('click', addRaycaster);
+    animate();
   }
 
   initFloor() {
-    const floorGeometry = new THREE.PlaneGeometry(1000, 1000, 1)
-    const floorMaterial = new THREE.ShadowMaterial({color: 0x000000, opacity: 0.2});
-    const floor = new THREE.Mesh(floorGeometry, floorMaterial)
-    floor.rotation.x = -Math.PI / 2
-    floor.position.y = -0.01
-    this.scene.add(floor)
+    const floorGeometry = new THREE.PlaneGeometry(800, 800, 1);
+    const textureLoader = new THREE.TextureLoader();
+    // let texture = textureLoader.load("texture/pisa/ny1.png")
+    // const floorMaterial = new THREE.MeshPhongMaterial({map: texture})
+    // const floorMaterial = new THREE.MeshPhongMaterial({color: 0xffffff})
+    // const floor = new THREE.Mesh(floorGeometry, floorMaterial)
+    // floor.receiveShadow = true; // 接受阴影
+    // floor.rotation.x = -Math.PI / 2
+    // floor.position.y = -0.5
+    // this.scene.add(floor)
   }
 
   initLight() {
-    const ambientLight = new THREE.AmbientLight(0xffffff); // soft white light
-    this.scene.add(ambientLight);
-    const hemisphere = new THREE.HemisphereLight(0xffffff, 0xffffff, 1);
-    this.scene.add(hemisphere);
-
-    //给场景添加太阳光
-    let Sun = new THREE.DirectionalLight(0xffffff, 1);
-    Sun.position.set(20, 20, 20);
-    Sun.castShadow = true;
-
-    //设置相机渲染面积
-    Sun.shadow.camera.near = 0.01;
-    Sun.shadow.camera.far = 6000;
-    Sun.shadow.camera.top = 2200;
-    Sun.shadow.camera.bottom = -2200;
-    Sun.shadow.camera.left = -3500;
-    Sun.shadow.camera.right = 3500;
-    // 设置阴影分辨率
-    Sun.shadow.mapSize.width = 2048;  // default
-    Sun.shadow.mapSize.height = 2048; // default
-    //阴影限制
-    Sun.shadow.radius = 1;
-    this.scene.add(Sun);
-
-    let directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
-    directionalLight.position.set(-4, 8, 4)
-    this.scene.add(directionalLight);
+    // let spotLight = new THREE.SpotLight(0xffffff, 0.2);
+    // spotLight.position.set(-21, 50, -20);
+    // spotLight.castShadow = true;
+    // spotLight.shadow.mapSize.width = 2048;	//阴影贴图宽度设置为2048像素
+    // spotLight.shadow.mapSize.height = 2048;	//阴影贴图高度设置为2048像素
+    // spotLight.shadow.camera.near = 0.5;    // default
+    // spotLight.shadow.camera.far = 500;     // default
+    // const spotLightHelper = new THREE.SpotLightHelper(spotLight, 50, 0xff0000);
+    // this.scene.add(spotLightHelper);
+    // this.scene.add(spotLight);
   }
 
   addAxes() {
     const axes = new THREE.AxisHelper(100);
     this.scene.add(axes);
-
     const helper = new THREE.GridHelper(2000, 100);
     helper.material.opacity = 0.25;
     helper.material.transparent = true;
@@ -159,46 +122,8 @@ export default class RendererTemplate {
     document.body.appendChild(this.stats.domElement);
   }
 
-  flyTo() {
-    let tweenA = this.cameraCon({x: 10, y: 50, z: 50}, 3000)
-    let tweenB = this.cameraCon({x: 50, y: 25, z: -50}, 4000)
-    tweenA.chain(tweenB)
-    tweenB.start()
-  }
-
-  cameraCon(p2, time) {
-    let tween = new TWEEN.Tween(this.p1).to(p2, time).easing(TWEEN.Easing.Quadratic.InOut)
-    tween.onUpdate(() => {
-      this.camera.position.set(this.p1.x, this.p1.y, this.p1.z)
-      this.camera.lookAt(0, 0, 0)
-      this.controls.target.set(0, 0, 0) // 确保镜头移动后，视觉中心还在圆点处
-      this.controls.update()
-    })
-    return tween
-  }
-
-  randomGenerationGeometry() {
-    let count = 10000;
-    const geometry = new THREE.IcosahedronGeometry(3, 0);
-    const material = new THREE.MeshPhongMaterial({
-      wireframe: true
-    });
-    geometry.computeVertexNormals();
-
-    this.mesh = new THREE.InstancedMesh(geometry, material, count);
-    const color = new THREE.Color()
-    const matrix = new THREE.Matrix4();
-    for (let i = 0; i < count; i++) {
-      matrix.setPosition(Math.random() * 1000, Math.random() * 1000, Math.random() * 1000)
-      this.mesh.setMatrixAt(i, matrix);//这里的i即instanceId
-      this.mesh.setColorAt(i, color.setHex(Math.random() * 10 * 0xf00000));
-
-    }
-    this.scene.add(this.mesh);
-  }
-
   flowTexture() {
-    this.texture = new THREE.TextureLoader().load('texture.PNG')
+    this.texture = new THREE.TextureLoader().load("texture.PNG");
     this.texture.wrapS = THREE.RepeatWrapping;
     this.texture.wrapT = THREE.RepeatWrapping;
     this.texture.repeat.x = 10;
@@ -211,7 +136,15 @@ export default class RendererTemplate {
     plane.transparent = true;
     plane.side = THREE.DoubleSide;
 
-    const mesh = new THREE.Mesh(planeGeometry, plane)
-    this.scene.add(mesh)
+    const mesh = new THREE.Mesh(planeGeometry, plane);
+    this.scene.add(mesh);
+  }
+  /**
+   * 设置相机位置
+   * @param {Vector3} vec3
+   */
+  setCameraPosition(vec3) {
+    this.cameraPostion = vec3;
+    this.initPerspectiveCamera();
   }
 }

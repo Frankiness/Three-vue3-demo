@@ -1,0 +1,131 @@
+<template>
+  <div id="canvas-frame"></div>
+</template>
+<script setup>
+import { onMounted } from "@vue/runtime-core";
+import * as THREE from "three";
+
+let renderer;
+let stats;
+let clock;
+let uniforms1;
+let camera;
+let scene;
+let light;
+let mesh;
+let width, height;
+
+let vertexShader = `
+  uniform float time;
+
+  varying vec2 vUv;
+
+  void main( void ) {
+
+  vec2 position = - 1.0 + 2.0 * vUv;
+
+  float red = abs( sin( position.x * position.y + time / 5.0 ) );
+  float green = abs( sin( position.x * position.y + time / 4.0 ) );
+  float blue = abs( sin( position.x * position.y + time / 3.0 ) );
+  gl_FragColor = vec4( red, green, blue, 1.0 );
+
+  }
+`;
+let fragShader = `
+  varying vec2 vUv;
+
+  void main()
+  {
+    vUv = uv;
+    vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
+    gl_Position = projectionMatrix * mvPosition;
+  }
+`;
+//初始化webgl
+function initThree() {
+  width = document.getElementById("canvas-frame").clientWidth;
+  height = document.getElementById("canvas-frame").clientHeight;
+  renderer = new THREE.WebGLRenderer();
+
+  renderer.setSize(width, height);
+  document.getElementById("canvas-frame").appendChild(renderer.domElement);
+  renderer.setClearColor(0xffffff, 1.0);
+
+  clock = new THREE.Clock();
+
+  // stats = new Stats();
+  // stats.domElement.style.position = "absolute";
+  // stats.domElement.style.left = "0px";
+  // stats.domElement.style.top = "0px";
+  // document.getElementById("canvas-frame").appendChild(stats.domElement);
+}
+
+//设置相机
+function initCamera() {
+  camera = new THREE.PerspectiveCamera(45, width / height, 1, 10000);
+  camera.position.set(0, 0, 600);
+  camera.up = new THREE.Vector3(0, 1, 0);
+
+  camera.lookAt(0, 0, 0);
+}
+
+//初始化场景
+function initScene() {
+  scene = new THREE.Scene();
+}
+
+//设置化灯光
+function initLight() {
+  light = new THREE.AmbientLight(0xff0000);
+  light.position.set(100, 100, 200);
+  scene.add(light);
+}
+
+//几何物体
+function initObject() {
+  uniforms1 = {
+    time: { value: 1.0 },
+  };
+
+  var params = uniforms1;
+  var geometry = new THREE.CylinderGeometry(100, 150, 400);
+  var material = new THREE.ShaderMaterial({
+    uniforms: params,
+    vertexShader: vertexShader,
+    fragmentShader: fragShader,
+  });
+  mesh = new THREE.Mesh(geometry, material);
+  // mesh.position = new THREE.Vector3(0, 0, 0);
+  scene.add(mesh);
+}
+//运行webgl
+function threeStart() {
+  initThree();
+  initCamera();
+  initScene();
+  initLight();
+  initObject();
+  animation();
+}
+//设置动态场景
+function animation() {
+  var delta = clock.getDelta();
+  uniforms1.time.value += delta * 5;
+  renderer.render(scene, camera);
+  requestAnimationFrame(animation);
+  // stats.update();
+}
+
+onMounted(() => {
+  threeStart();
+});
+</script>
+<style>
+#canvas-frame {
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  height: 600px;
+  background-color: #eeeeee;
+}
+</style>

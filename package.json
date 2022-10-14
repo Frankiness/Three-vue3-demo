@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "ant-design-vue": "^3.2.7",
+    "dat.gui": "^0.7.9",
     "three": "^0.140.0",
     "vue": "^3.2.25",
     "vue-router": "^4.0.16"
@@ -16,6 +17,7 @@
   "devDependencies": {
     "@vitejs/plugin-vue": "^2.3.1",
     "d3": "^7.4.4",
+    "prettier": "2.7.1",
     "vite": "^2.9.7"
   }
 }

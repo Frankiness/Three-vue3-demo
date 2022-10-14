@@ -1,0 +1,112 @@
+# Blender MTL File: 'None'
+# Material Count: 10
+
+newmtl Bolts_Aloy
+Ns 90.000007
+Ka 1.000000 1.000000 1.000000
+Kd 0.204776 0.228896 0.266762
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+
+newmtl Brake_Calipers
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Bump E:\\code\\three-demo\\public\\model\\Audi\\textures\\Brake_Calipers_normal.png
+map_Kd E:\\code\\three-demo\\public\\model\\Audi\\textures\\Brake_Calipers_baseColor.jpeg
+
+newmtl Brake_Disc
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Bump E:\\code\\three-demo\\public\\model\\Audi\\textures\\Brake_Disc_normal.png
+map_Kd E:\\code\\three-demo\\public\\model\\Audi\\textures\\Brake_Disc_baseColor.png
+
+newmtl Car_Body
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Bump E:\\code\\three-demo\\public\\model\\Audi\\textures\\Car_Body_normal.png
+map_Kd E:\\code\\three-demo\\public\\model\\Audi\\textures\\Car_Body_baseColor.png
+
+newmtl Glass
+Ns 940.900001
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 0.102411
+illum 6
+
+newmtl Metal
+Ns 717.874225
+Ka 1.000000 1.000000 1.000000
+Kd 0.486898 0.486898 0.486898
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+
+newmtl Paint
+Ns 250.000000
+Ka 0.600000 0.600000 0.600000
+Kd 0.214041 0.214041 0.214041
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+
+newmtl Painted_Metal
+Ns 0.004566
+Ka 1.000000 1.000000 1.000000
+Kd 0.008076 0.008076 0.008076
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+
+newmtl Tyre
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Bump E:\\code\\three-demo\\public\\model\\Audi\\textures\\Tyre_normal.png
+map_Kd E:\\code\\three-demo\\public\\model\\Audi\\textures\\Tyre_baseColor.png
+
+newmtl Tyre_Emblem
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Bump E:\\code\\three-demo\\public\\model\\Audi\\textures\\Tyre_Emblem_normal.png
+map_Kd E:\\code\\three-demo\\public\\model\\Audi\\textures\\Tyre_Emblem_baseColor.png

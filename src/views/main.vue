@@ -1,52 +1,60 @@
 <template>
-  <a-layout style="width: 100vw;height: 100vh;">
+  <!--  <router-view></router-view>-->
+  <a-layout style="width: 100vw; height: 100vh">
     <a-layout-sider>
-      <a-menu v-model:selectedKeys="selectedKeys" theme="dark" mode="inline">
-        <a-menu-item key="1">
-          <span>nav 1</span>
+      <a-menu
+        v-model:selectedKeys="selectedKeys"
+        theme="dark"
+        mode="inline"
+        @click="handleMuneClick"
+      >
+        <a-menu-item key="display-car">
+          <span>改变模型材质颜色</span>
         </a-menu-item>
-        <a-menu-item key="2">
-          <span>nav 2</span>
+        <a-menu-item key="shadow">
+          <span>投影</span>
         </a-menu-item>
-        <a-menu-item key="3">
-          <span>nav 3</span>
+        <a-menu-item key="geojson">
+          <span>Geojson转三维</span>
+        </a-menu-item>
+        <a-menu-item key="radar">
+          <span>雷达波</span>
+        </a-menu-item>
+        <a-menu-item key="wave">
+          <span>扩散波</span>
+        </a-menu-item>
+        <a-menu-item key="fly-line">
+          <span>飞线</span>
+        </a-menu-item>
+        <a-menu-item key="exploder">
+          <span>模型爆炸拆解</span>
+        </a-menu-item>
+        <a-menu-item key="indexedDB">
+          <span>IndexedDB缓存模型</span>
+        </a-menu-item>
+        <a-menu-item key="clipping">
+          <span>物体剪裁</span>
         </a-menu-item>
       </a-menu>
     </a-layout-sider>
     <a-layout>
       <a-layout-content
-          :style="{ margin: '12px', background: '#fff', minHeight: '280px' }"
+        :style="{ margin: '12px', background: '#fff', minHeight: '280px' }"
       >
         <router-view></router-view>
       </a-layout-content>
     </a-layout>
   </a-layout>
 </template>
-<script lang="ts">
-import {
-  MenuFoldOutlined,
-  MenuUnfoldOutlined,
-  UploadOutlined,
-  UserOutlined,
-  VideoCameraOutlined,
-} from '@ant-design/icons-vue';
-import {defineComponent, ref} from 'vue';
+<script setup>
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 
-export default defineComponent({
-  components: {
-    UserOutlined,
-    VideoCameraOutlined,
-    UploadOutlined,
-    MenuUnfoldOutlined,
-    MenuFoldOutlined,
-  },
-  setup() {
-    return {
-      selectedKeys: ref(['1']),
-      collapsed: ref(false),
-    };
-  },
-});
+const router = useRouter();
+let selectedKeys = ref(['display-car']);
+const handleMuneClick = (e) => {
+  router.push(e.key);
+};
 </script>
 <style>
 #components-layout-demo-custom-trigger .trigger {

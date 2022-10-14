@@ -1,15 +1,54 @@
-import {createRouter, createWebHistory} from "vue-router";
+import { createRouter, createWebHistory } from 'vue-router';
 
 const routes = [
   {
-    path: "/",
-    name: "Tesla",
-    component: () => import("../components/Tesla.vue"),
+    path: '/',
+    redirect: '/display-car',
   },
   {
-    path: "/three",
-    name: "three",
-    component: () => import("../components/ThreePage.vue"),
+    path: '/display-car',
+    name: 'display-car',
+    component: () => import('../views/displayCar/index.vue'),
+  },
+  {
+    path: '/shadow',
+    name: 'shadow',
+    component: () => import('../views/shadow/index.vue'),
+  },
+  {
+    path: '/geojson',
+    name: 'geojson',
+    component: () => import('../views/geojson/index.vue'),
+  },
+  {
+    path: '/radar',
+    name: 'radar',
+    component: () => import('../views/radar/index.vue'),
+  },
+  {
+    path: '/wave',
+    name: 'wave',
+    component: () => import('../views/waves/index.vue'),
+  },
+  {
+    path: '/fly-line',
+    name: 'fly-line',
+    component: () => import('../views/line/index.vue'),
+  },
+  {
+    path: '/exploder',
+    name: 'exploder',
+    component: () => import('../views/exploder/index.vue'),
+  },
+  {
+    path: '/indexedDB',
+    name: 'indexedDB',
+    component: () => import('../views/indexedDB/index.vue'),
+  },
+  {
+    path: '/clipping',
+    name: 'clipping',
+    component: () => import('../views/clipping/index.vue'),
   },
 ];
 
