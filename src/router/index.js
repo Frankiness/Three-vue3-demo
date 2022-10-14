@@ -40,6 +40,11 @@ const routes = [
     name: 'exploder',
     component: () => import('../views/exploder/index.vue'),
   },
+  {
+    path: '/indexedDB',
+    name: 'indexedDB',
+    component: () => import('../components/IndexDB.vue'),
+  },
 ];
 
 const router = createRouter({

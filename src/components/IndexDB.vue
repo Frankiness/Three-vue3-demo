@@ -1,52 +1,39 @@
 <template>
-  INDEX
+  <div id="container" ref="container"></div>
 </template>
 
 <script setup>
 //打开数据库
-import {onMounted} from "vue";
+import { onMounted, ref } from 'vue';
+import { IndexDBCache } from '../utils/utils';
+import { Web3DRenderer } from '../utils/Web3DRenderer';
 
-let db
-const request = window.indexedDB.open('model', 1);
-request.onerror = (e) => {
-  console.log('数据库打开失败')
-}
-request.onsuccess = (e) => {
-  db = request.result
-  console.log('数据库打开成功')
-  add(db)
-}
-//建立数据库
-request.onupgradeneeded = function (event) {
-  console.log('创建成功')
-  db = event.target.result;
-  let objectStore;
-  if (!db.objectStoreNames.contains('person')) {
-    objectStore = db.createObjectStore('person', {keyPath: 'id'}); //建表
-    objectStore.createIndex('name', 'name', {unique: false}); //建立字段
-    objectStore.createIndex('email', 'email', {unique: true});
-  }
-}
-//写入数据库
-const add = (db) => {
-  const request = db.transaction(['person'], 'readwrite')
-      .objectStore('person')
-      .add({id: 1, name: '张三', age: 24, email: 'zhangsan@example.com'});
-
-  request.onsuccess = function (event) {
-    console.log('数据写入成功');
+let container = ref(null);
+let web3d = null;
+//初始化场景
+const initScene = async () => {
+  web3d = new Web3DRenderer(container.value);
+  web3d.setCameraPosition({ x: 300, y: 500, z: 1000 });
+  web3d.showStatus();
+  const render = () => {
+    requestAnimationFrame(render);
+    web3d.renderer.render(web3d.scene, web3d.camera);
+    web3d.stats.update();
   };
+  render();
+};
 
-  request.onerror = function (event) {
-    console.log('数据写入失败');
-  }
-}
 onMounted(() => {
-  // console.log(db)
-  // add()
-})
+  initScene();
+  const db = new IndexDBCache(async () => {
+    db.loadModel(web3d.scene, 'model/Audi/scene-processed.gltf').then((t) => {});
+  });
+});
 </script>
 
 <style scoped>
-
+#container {
+  width: 100%;
+  height: 100%;
+}
 </style>

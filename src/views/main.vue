@@ -29,6 +29,9 @@
         <a-menu-item key="exploder">
           <span>模型爆炸拆解</span>
         </a-menu-item>
+        <a-menu-item key="indexedDB">
+          <span>IndexedDB缓存模型</span>
+        </a-menu-item>
       </a-menu>
     </a-layout-sider>
     <a-layout>
