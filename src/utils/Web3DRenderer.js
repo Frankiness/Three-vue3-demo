@@ -238,7 +238,6 @@ export class Web3DRenderer {
     this._version = VERSION;
 
     this.THREE = THREE;
-    // this.TWEEN = TWEEN
 
     this.perspective = 'perspective';
 

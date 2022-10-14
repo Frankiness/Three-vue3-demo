@@ -18,13 +18,14 @@ import * as THREE from 'three';
 import { onMounted, ref } from 'vue';
 import { Web3DRenderer } from '../../utils/Web3DRenderer';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
+import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader';
 
 let web3d = ref(null);
 let markContainer = ref(null);
 // 初始化场景
 const init = () => {
   web3d = new Web3DRenderer(markContainer.value);
-  web3d.setCameraPosition({ x: 800, y: 500, z: 100 });
+  web3d.setCameraPosition({ x: 1200, y: 100, z: 100 });
   const render = () => {
     requestAnimationFrame(render);
     web3d.renderer.render(web3d.scene, web3d.camera);
@@ -36,9 +37,16 @@ const init = () => {
  * 加载模型（建议使用obj模型，gltf模型存在部分位置偏差）
  */
 const load = async () => {
-  const loader = new OBJLoader();
-  loader.load('model/Obj/new_car.obj', (obj) => {
-    createExploder(obj); //如果是gltf模型，则填入obj.scene
+  const mtlLoader = new MTLLoader();
+  mtlLoader.load('model/Obj/new_car.mtl', (mtl) => {
+    mtl.preload();
+    const objLoader = new OBJLoader();
+    objLoader.setMaterials(mtl);
+
+    // 加载模型
+    objLoader.load('model/Obj/new_car.obj', (obj) => {
+      createExploder(obj); //如果是gltf模型，则填入obj.scene
+    });
   });
 };
 
