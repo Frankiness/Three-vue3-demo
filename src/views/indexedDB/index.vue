@@ -5,8 +5,8 @@
 <script setup>
 //打开数据库
 import { onMounted, ref } from 'vue';
-import { IndexDBCache } from '../utils/utils';
-import { Web3DRenderer } from '../utils/Web3DRenderer';
+import { IndexDBCache } from './index';
+import { Web3DRenderer } from '../../utils/Web3DRenderer';
 
 let container = ref(null);
 let web3d = null;
@@ -25,8 +25,10 @@ const initScene = async () => {
 
 onMounted(() => {
   initScene();
-  const db = new IndexDBCache(async () => {
-    db.loadModel(web3d.scene, 'model/Audi/scene-processed.gltf').then((t) => {});
+  const db = new IndexDBCache(() => {
+    db.loadModel(web3d.scene, 'model/Audi/scene-processed.gltf').then(() => {
+      console.log(`加载完成`);
+    });
   });
 });
 </script>

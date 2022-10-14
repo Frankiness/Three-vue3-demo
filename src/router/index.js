@@ -43,7 +43,7 @@ const routes = [
   {
     path: '/indexedDB',
     name: 'indexedDB',
-    component: () => import('../components/IndexDB.vue'),
+    component: () => import('../views/indexedDB/index.vue'),
   },
 ];
 
