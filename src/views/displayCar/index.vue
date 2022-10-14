@@ -7,13 +7,13 @@
 
 <script setup>
 import * as THREE from 'three';
-import { Web3DRenderer } from '../utils/Web3DRenderer';
+import { Web3DRenderer } from '../../utils/Web3DRenderer';
 import { onMounted, ref } from 'vue';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader';
 import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader';
 
-import Mask from '../components/Mask.vue';
+import Mask from '../../components/Mask.vue';
 
 let maskShow = ref(true);
 let progress = ref(0);
