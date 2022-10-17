@@ -134,6 +134,15 @@ function createPointLight() {
   return pointLight;
 }
 
+//聚光灯
+function createSpotLight(){
+  const spotLight = new THREE.SpotLight(POINT_LIGHT_COLOR)
+  spotLight.castShadow = true; //阴影
+  spotLight.position.set(20,100,30)
+  const spotLightHelper = new THREE.SpotLightHelper(spotLight, 0xff0000);
+  return {spotLight,spotLightHelper}
+}
+
 // 环境光
 function createEnvironment(renderer) {
   const pmremGenerator = new THREE.PMREMGenerator(renderer);
