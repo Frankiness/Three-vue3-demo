@@ -2,7 +2,7 @@
   <div id="container" ref="container">
     <input
       type="range"
-      min="0"
+      min="-100"
       max="100"
       step="1"
       value="0"
@@ -15,7 +15,7 @@
 
 <script setup>
 //打开数据库
-import { onMounted, ref,onBeforeUnmount } from 'vue';
+import { onMounted, ref } from 'vue';
 import { Web3DRenderer } from '../../utils/Web3DRenderer';
 import * as THREE from 'three';
 
@@ -49,11 +49,9 @@ const initGeometry = () => {
   web3d.scene.add(object);
 
   document.querySelector('#myRange').addEventListener('input', function (evt) {
-    localPlane.constant = this.value
+    localPlane.constant = this.value; // constant是原点到平面的距离
   });
 };
-
-
 
 onMounted(() => {
   initScene();
