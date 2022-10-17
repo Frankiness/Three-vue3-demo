@@ -95,6 +95,7 @@ const createHDR = () => {
       const gltf = await loadFile('model/Audi/scene.gltf');
       maskShow.value = false; //关闭遮罩层
       gltf.scene.scale.set(0.1, 0.1, 0.1);
+      gltf.scene.position.y = 16;
       web3d.scene.add(gltf.scene);
     });
 };
