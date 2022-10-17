@@ -47,6 +47,7 @@ const init = () => {
   scene.add(spotLightHelper);
   scene.add(spotLight);
 
+  // 模型阴影
   const gltfLoader = new GLTFLoader()
   gltfLoader.load('model/Audi/scene.gltf',(gltf)=>{
     gltf.scene.scale.set(0.01, 0.01, 0.01);
