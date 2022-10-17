@@ -150,7 +150,7 @@ function createWebGLRenderer(element, w, h) {
   renderer.setPixelRatio(window.devicePixelRatio);
   renderer.setSize(w, h);
   renderer.setClearColor(RENDERER_BACKGROUND_COLOR, RENDERER_ALPHA);
-  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.enabled = true; //开启阴影
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   renderer.outputEncoding = THREE.sRGBEncoding;
   renderer.domElement.className = 'renderer';
@@ -163,12 +163,23 @@ function createAxes() {
   return new THREE.AxesHelper(150);
 }
 
-// 地板格子
+// 地板helper
 function createGridHelper() {
   const helper = new THREE.GridHelper(2000, 100);
   helper.material.opacity = 0.25;
   helper.material.transparent = true;
   return helper;
+}
+
+// 创建地板
+function createFloor() {
+  const floorGeometry = new THREE.PlaneGeometry(800, 800, 1);
+  const floorMaterial = new THREE.MeshPhongMaterial({color: 0xdddddd})
+  const floor = new THREE.Mesh(floorGeometry, floorMaterial)
+  floor.receiveShadow = true; // 接受阴影
+  floor.rotation.x = -Math.PI / 2
+  floor.position.y = -0.5
+  return floor
 }
 
 // 鼠标视角控制
@@ -292,6 +303,8 @@ export class Web3DRenderer {
     this.scene.add(createAxes());
 
     // this.scene.add(createGridHelper());
+
+    // this.scene.add(createFloor())
 
     // 后期
     // 组合器composer
