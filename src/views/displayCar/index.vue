@@ -82,7 +82,7 @@ const setCarColor = (color) => {
   });
 };
 
-// 光探针
+// 创建HDR环境贴图
 const createHDR = () => {
   new RGBELoader()
     .setPath('texture/hdr/')
