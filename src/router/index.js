@@ -50,6 +50,16 @@ const routes = [
     name: 'clipping',
     component: () => import('../views/clipping/index.vue'),
   },
+  {
+    path: '/flowTexture',
+    name: 'flowTexture',
+    component: () => import('../views/flowTexture/index.vue'),
+  },
+  {
+    path: '/scholl',
+    name: 'scholl',
+    component: () => import('../views/school/index.vue'),
+  },
 ];
 
 const router = createRouter({
