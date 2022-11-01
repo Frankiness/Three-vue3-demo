@@ -35,6 +35,12 @@
         <a-menu-item key="clipping">
           <span>物体剪裁</span>
         </a-menu-item>
+        <a-menu-item key="flowTexture">
+          <span>流动纹理</span>
+        </a-menu-item>
+        <a-menu-item key="scholl">
+          <span>学校</span>
+        </a-menu-item>
       </a-menu>
     </a-layout-sider>
     <a-layout>
