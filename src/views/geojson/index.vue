@@ -17,6 +17,58 @@ let opacitys = null;
 const geometry = new THREE.BufferGeometry();
 let currentPos = 0;
 let pointSpeed = 20; // 线段移动速度
+
+// 控制 颜色和粒子大小
+const params = {
+  pointSize: 20.0,
+  pointColor: '#4ec0e9',
+};
+
+const vertexShader = `
+  attribute float aOpacity;
+  uniform float uSize;
+  varying float vOpacity;
+  void main(){
+      gl_Position = projectionMatrix*modelViewMatrix*vec4(position,1.0);
+      gl_PointSize = uSize;
+      vOpacity=aOpacity;
+  }
+  `;
+
+const fragmentShader = `
+  varying float vOpacity;
+  uniform vec3 uColor;
+  float invert(float n){
+      return 1.-n;
+  }
+  void main(){
+    if(vOpacity <=0.2){
+        discard;
+    }
+    vec2 uv=vec2(gl_PointCoord.x,invert(gl_PointCoord.y));
+    vec2 cUv=2.*uv-1.;
+    vec4 color=vec4(1./length(cUv));
+    color*=vOpacity;
+    color.rgb*=uColor;
+    gl_FragColor=color;
+  }
+  `;
+const points = new THREE.Points(
+  geometry,
+  new THREE.ShaderMaterial({
+    vertexShader: vertexShader,
+    fragmentShader: fragmentShader,
+    transparent: true, // 设置透明
+    uniforms: {
+      uSize: {
+        value: params.pointSize,
+      },
+      uColor: {
+        value: new THREE.Color(params.pointColor),
+      },
+    },
+  }),
+);
 // 以北京为中心 修改坐标
 const projection = d3
   .geoMercator()
@@ -50,55 +102,7 @@ const lineDraw = (polygon, color) => {
   });
   return new THREE.Line(lineGeometry, lineMaterial);
 };
-// 控制 颜色和粒子大小
-const params = {
-  pointSize: 2.0,
-  pointColor: '#4ec0e9',
-};
 
-const vertexShader = `
-  attribute float aOpacity;
-  uniform float uSize;
-  varying float vOpacity;
-  void main(){
-      gl_Position = projectionMatrix*modelViewMatrix*vec4(position,1.0);
-      gl_PointSize = uSize;
-      vOpacity=aOpacity;
-  }
-  `;
-
-const fragmentShader = `
-  varying float vOpacity;
-  uniform vec3 uColor;
-  float invert(float n){
-      return 1.-n;
-  }
-  void main(){
-    if(vOpacity <=0.2){
-        discard;
-    }
-    vec2 uv=vec2(gl_PointCoord.x,invert(gl_PointCoord.y));
-    vec2 cUv=2.*uv-1.;
-    vec4 color=vec4(1./length(cUv));
-    color*=vOpacity;
-    color.rgb*=uColor;
-    gl_FragColor=color;
-  }
-  `;
-const material = new THREE.ShaderMaterial({
-  vertexShader: vertexShader,
-  fragmentShader: fragmentShader,
-  transparent: true, // 设置透明
-  uniforms: {
-    uSize: {
-      value: params.pointSize,
-    },
-    uColor: {
-      value: new THREE.Color(params.pointColor),
-    },
-  },
-});
-const points = new THREE.Points(geometry, material);
 /**
  * 加载json文件
  */
@@ -126,11 +130,11 @@ const drawMap = (jsonData) => {
         const lineGeometry = new THREE.BufferGeometry();
 
         for (let i = 0; i < polygon.length; i++) {
-          const [x, y] = projection(polygon[i]);
+          const [x, y, z] = projection(polygon[i]);
           if (i === 0) {
-            shape.moveTo(x, -y);
+            shape.moveTo(x, -y, z);
           }
-          shape.lineTo(x, -y);
+          shape.lineTo(x, -y, z);
           positions.push(Number(x), Number(-y), 4);
         }
         const vertices = new Float32Array(positions);
@@ -203,6 +207,7 @@ const init = () => {
       for (let i = 0; i < 200; i++) {
         opacitys[(currentPos + i) % lines.length] = i / 50 > 2 ? 2 : i / 50;
       }
+      console.log(opacitys);
       geometry.attributes.aOpacity.needsUpdate = true;
     }
     requestAnimationFrame(render);

@@ -56,9 +56,19 @@ const routes = [
     component: () => import('../views/flowTexture/index.vue'),
   },
   {
-    path: '/scholl',
-    name: 'scholl',
+    path: '/school',
+    name: 'school',
     component: () => import('../views/school/index.vue'),
+  },
+  {
+    path: '/upFlow',
+    name: 'upFlow',
+    component: () => import('../views/upFlow/index.vue'),
+  },
+  {
+    path: '/sweep',
+    name: 'sweep',
+    component: () => import('../views/sweep/index.vue'),
   },
 ];
 

@@ -38,8 +38,14 @@
         <a-menu-item key="flowTexture">
           <span>流动纹理</span>
         </a-menu-item>
-        <a-menu-item key="scholl">
-          <span>学校</span>
+        <a-menu-item key="school">
+          <span>昼夜切换</span>
+        </a-menu-item>
+        <a-menu-item key="upFlow">
+          <span>建筑上升光圈</span>
+        </a-menu-item>
+        <a-menu-item key="sweep">
+          <span>城市扫光</span>
         </a-menu-item>
       </a-menu>
     </a-layout-sider>
