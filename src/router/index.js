@@ -70,6 +70,11 @@ const routes = [
     name: 'sweep',
     component: () => import('../views/sweep/index.vue'),
   },
+  {
+    path: '/bloom',
+    name: 'bloom',
+    component: () => import('../views/unreal-bloom/index.vue'),
+  },
 ];
 
 const router = createRouter({

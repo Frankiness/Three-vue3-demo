@@ -47,6 +47,9 @@
         <a-menu-item key="sweep">
           <span>城市扫光</span>
         </a-menu-item>
+        <a-menu-item key="bloom">
+          <span>点击物体边缘泛光</span>
+        </a-menu-item>
       </a-menu>
     </a-layout-sider>
     <a-layout>
