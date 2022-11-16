@@ -135,12 +135,12 @@ function createPointLight() {
 }
 
 //聚光灯
-function createSpotLight(){
-  const spotLight = new THREE.SpotLight(POINT_LIGHT_COLOR)
+function createSpotLight() {
+  const spotLight = new THREE.SpotLight(POINT_LIGHT_COLOR);
   spotLight.castShadow = true; //阴影
-  spotLight.position.set(20,100,30)
+  spotLight.position.set(20, 100, 30);
   const spotLightHelper = new THREE.SpotLightHelper(spotLight, 0xff0000);
-  return {spotLight,spotLightHelper}
+  return { spotLight, spotLightHelper };
 }
 
 // 环境光
@@ -183,12 +183,12 @@ function createGridHelper() {
 // 创建地板
 function createFloor() {
   const floorGeometry = new THREE.PlaneGeometry(800, 800, 1);
-  const floorMaterial = new THREE.MeshPhongMaterial({color: 0xdddddd})
-  const floor = new THREE.Mesh(floorGeometry, floorMaterial)
+  const floorMaterial = new THREE.MeshPhongMaterial({ color: 0xdddddd });
+  const floor = new THREE.Mesh(floorGeometry, floorMaterial);
   floor.receiveShadow = true; // 接受阴影
-  floor.rotation.x = -Math.PI / 2
-  floor.position.y = -0.5
-  return floor
+  floor.rotation.x = -Math.PI / 2;
+  floor.position.y = -0.5;
+  return floor;
 }
 
 // 鼠标视角控制
@@ -296,7 +296,7 @@ export class Web3DRenderer {
     // 初始化渲染器
     this.renderer = createWebGLRenderer(element, this.width, this.height);
     this.renderer.render(this.scene, this.camera);
-    
+
     this.renderer.localClippingEnabled = true;
 
     // 添加环境
@@ -344,7 +344,6 @@ export class Web3DRenderer {
    */
   switchCamera() {
     const { x, y, z } = this.camera.position;
-    console.log(this.camera instanceof THREE.PerspectiveCamera);
     if (this.camera instanceof THREE.PerspectiveCamera) {
       this.camera = createOrthographicCamera(x, y, z);
       this.orbitControls = createOrbitControls(this.camera, this.renderer);

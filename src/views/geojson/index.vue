@@ -207,7 +207,6 @@ const init = () => {
       for (let i = 0; i < 200; i++) {
         opacitys[(currentPos + i) % lines.length] = i / 50 > 2 ? 2 : i / 50;
       }
-      console.log(opacitys);
       geometry.attributes.aOpacity.needsUpdate = true;
     }
     requestAnimationFrame(render);

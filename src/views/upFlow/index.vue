@@ -29,30 +29,29 @@ const init = () => {
 
 // 创建结合体
 function createBuilding() {
-  const loader = new GLTFLoader()
-  loader.load('city/day.glb',(gltf)=>{
-    console.log(gltf);
+  const loader = new GLTFLoader();
+  loader.load('city/day.glb', (gltf) => {
     const shader = new THREE.ShaderMaterial({
-    // uniforms 是将自己声明的变量传递到着色器中，必须是.value的形式
-    uniforms: {
-      height: height,
-      // 上升线颜色
-      uFlowColor: {
-        value: new THREE.Color('#5588aa'),
+      // uniforms 是将自己声明的变量传递到着色器中，必须是.value的形式
+      uniforms: {
+        height: height,
+        // 上升线颜色
+        uFlowColor: {
+          value: new THREE.Color('#5588aa'),
+        },
+        // 物体表面颜色
+        uCityColor: {
+          value: new THREE.Color('#FFFFDC'),
+        },
       },
-      // 物体表面颜色
-      uCityColor: {
-        value: new THREE.Color('#FFFFDC'),
-      },
-    },
-    vertexShader: `
+      vertexShader: `
       varying vec3 vPosition;
       void main()
       {
         vPosition = position;
         gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
       }`,
-    fragmentShader: `
+      fragmentShader: `
       varying vec3 vPosition; // varying 声明的变量可以共用
       uniform float height;
       uniform vec3 uFlowColor;
@@ -69,13 +68,12 @@ function createBuilding() {
         }
         gl_FragColor = vec4(distColor, 0.6); // vec4最后一个变量调整透明度
       }`,
-    transparent: true,
-  });
-    gltf.scene.children[0].material = shader
-    gltf.scene.children[0].material.needsUpdate  = true;
+      transparent: true,
+    });
+    gltf.scene.children[0].material = shader;
+    gltf.scene.children[0].material.needsUpdate = true;
     web3d.scene.add(gltf.scene);
-  })
-  
+  });
 }
 
 onMounted(() => {
