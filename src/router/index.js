@@ -75,6 +75,11 @@ const routes = [
     name: 'bloom',
     component: () => import('../views/unreal-bloom/index.vue'),
   },
+  {
+    path: '/gltf-wire-frame',
+    name: 'gltf-wire-frame',
+    component: () => import('../views/gltfWireFrame/index.vue'),
+  },
 ];
 
 const router = createRouter({

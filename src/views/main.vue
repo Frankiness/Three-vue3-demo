@@ -50,6 +50,9 @@
         <a-menu-item key="bloom">
           <span>点击物体边缘泛光</span>
         </a-menu-item>
+        <a-menu-item key="gltf-wire-frame">
+          <span>GLTF模型线框模式</span>
+        </a-menu-item>
       </a-menu>
     </a-layout-sider>
     <a-layout>
