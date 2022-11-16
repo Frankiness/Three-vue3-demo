@@ -47,7 +47,7 @@ function createBuilding() {
       {
         //模型的基础颜色
         vec3 distColor=uCityColor;
-        gl_FragColor = vec4(distColor, 0.4); // vec4最后一个变量调整透明度
+        gl_FragColor = vec4(distColor, 0.2); // vec4最后一个变量调整透明度
       }`,
       transparent: true,
     });
