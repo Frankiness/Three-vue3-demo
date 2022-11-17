@@ -53,6 +53,9 @@
         <a-menu-item key="gltf-wire-frame">
           <span>GLTF模型线框模式</span>
         </a-menu-item>
+        <a-menu-item key="3d-heatmap">
+          <span>3D热力图</span>
+        </a-menu-item>
       </a-menu>
     </a-layout-sider>
     <a-layout>

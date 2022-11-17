@@ -80,6 +80,11 @@ const routes = [
     name: 'gltf-wire-frame',
     component: () => import('../views/gltfWireFrame/index.vue'),
   },
+  {
+    path: '/3d-heatmap',
+    name: '3d-heatmap',
+    component: () => import('../views/3d-heatmap/index.vue'),
+  },
 ];
 
 const router = createRouter({
