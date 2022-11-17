@@ -56,6 +56,12 @@
         <a-menu-item key="3d-heatmap">
           <span>3D热力图</span>
         </a-menu-item>
+        <a-menu-item key="water-ball">
+          <span>水球</span>
+        </a-menu-item>
+        <a-menu-item key="raising-code">
+          <span>上升的数字</span>
+        </a-menu-item>
       </a-menu>
     </a-layout-sider>
     <a-layout>

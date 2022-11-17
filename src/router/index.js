@@ -85,6 +85,16 @@ const routes = [
     name: '3d-heatmap',
     component: () => import('../views/3d-heatmap/index.vue'),
   },
+  {
+    path: '/water-ball',
+    name: 'water-ball',
+    component: () => import('../views/water-ball/index.vue'),
+  },
+  {
+    path: '/raising-code',
+    name: 'raising-code',
+    component: () => import('../views/raising-code/index.vue'),
+  },
 ];
 
 const router = createRouter({
