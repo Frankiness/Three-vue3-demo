@@ -8,7 +8,6 @@
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { onMounted, ref } from 'vue';
 import { Web3DRenderer } from '../../utils/Web3DRenderer';
-import TWEEN from '@tweenjs/tween.js';
 
 let web3d = ref(null);
 let markContainer = ref(null);
