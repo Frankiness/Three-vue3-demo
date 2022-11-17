@@ -52,7 +52,7 @@ const loadFile = (url) => {
  */
 const initScene = async () => {
   web3d = new Web3DRenderer(container.value);
-  web3d.setCameraPosition({ x: 0, y: 0, z: 30 });
+  web3d.setCameraPosition({ x: 70, y: 100, z: 100 });
   createHDR();
   const render = () => {
     requestAnimationFrame(render);

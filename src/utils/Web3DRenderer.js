@@ -55,7 +55,7 @@ const RENDERER_BACKGROUND_COLOR = 0x262626; //空间背景颜色
 const RENDERER_ALPHA = 1; // 0~1
 
 // orbitControls
-const MIN_DISTANCE = 10; // 缩放最小距离
+const MIN_DISTANCE = 100; // 缩放最小距离
 const MAX_DISTANCE = 1000; // 缩放最大距离
 
 let timer = null;

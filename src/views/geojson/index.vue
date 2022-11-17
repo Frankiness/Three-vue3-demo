@@ -20,7 +20,7 @@ let pointSpeed = 20; // 线段移动速度
 
 // 控制 颜色和粒子大小
 const params = {
-  pointSize: 20.0,
+  pointSize: 5.0,
   pointColor: '#4ec0e9',
 };
 

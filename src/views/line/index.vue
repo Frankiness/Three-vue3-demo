@@ -3,10 +3,10 @@
 </template>
 
 <script setup>
-import * as THREE from "three";
-import { onMounted, ref } from "vue";
-import { Web3DRenderer } from "../../utils/Web3DRenderer";
-import { flyLine } from "./index";
+import * as THREE from 'three';
+import { onMounted, ref } from 'vue';
+import { Web3DRenderer } from '../../utils/Web3DRenderer';
+import { flyLine } from './index';
 
 //飞线位置参数
 const lineData = [
@@ -23,7 +23,7 @@ const lineData = [
     },
     range: 120,
     height: 500,
-    color: "#ff0000",
+    color: '#ff0000',
     speed: 1,
     size: 10,
   },
@@ -40,7 +40,7 @@ const lineData = [
     },
     height: 300,
     range: 150,
-    color: "#ff0000",
+    color: '#ff0000',
     speed: 1,
     size: 10,
   },
@@ -51,7 +51,7 @@ let group = new THREE.Group();
 let time = ref(0);
 const init = () => {
   web3d = new Web3DRenderer(markContainer.value);
-  web3d.setCameraPosition({ x: 50, y: 50, z: 50 });
+  web3d.setCameraPosition({ x: 500, y: 500, z: 500 });
   const render = () => {
     time.value += 0.01; //雷达随时间变化
     requestAnimationFrame(render);
