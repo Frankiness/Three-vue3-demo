@@ -51,16 +51,13 @@ const fragmentShader = `
 `;
 
 const createWaterBall = () => {
-  const waterGeometry = new THREE.CircleBufferGeometry(20, 32);
+  const waterGeometry = new THREE.CircleBufferGeometry(50, 60);
   water = new Water(waterGeometry, {
     textureWidth: 512,
     textureHeight: 512,
-    waterNormals: new THREE.TextureLoader().load(
-      './waternormals.jpg',
-      function (texture) {
-        texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-      },
-    ),
+    waterNormals: new THREE.TextureLoader().load('texture/image/waternormals.jpg', function (texture) {
+      texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+    }),
     alpha: 1.0,
     // sunDirection: light.position.clone().normalize(),
     sunColor: 0xffffff,
@@ -69,6 +66,7 @@ const createWaterBall = () => {
     distortionScale: 3.7,
     fog: true,
   });
+
   water.rotation.x = -Math.PI / 2;
   web3d.scene.add(water);
 
@@ -87,12 +85,12 @@ const createWaterBall = () => {
     opacity: 0.5,
   });
 
-  const geometry = new THREE.SphereBufferGeometry(20, 32, 32);
-  const material = new THREE.MeshBasicMaterial({
-    color: 0xffff00,
-    transparent: true,
-    opacity: 0.3,
-  });
+  const geometry = new THREE.SphereBufferGeometry(50, 50, 50);
+  // const material = new THREE.MeshBasicMaterial({
+  //   color: 0xffff00,
+  //   transparent: true,
+  //   opacity: 0.3,
+  // });
   const sphere = new THREE.Mesh(geometry, shadermaterial);
   web3d.scene.add(sphere);
 };
@@ -101,10 +99,9 @@ const init = () => {
   web3d = new Web3DRenderer(container.value);
   web3d.setCameraPosition({ x: 50, y: 50, z: 50 });
 
-  // time = performance.now() * 0.001;
-  // water.material.uniforms['time'].value += 1.0 / 60.0;
-
   const render = () => {
+    let time = performance.now() * 0.001;
+    water && (water.material.uniforms['time'].value += 1.0 / 60.0);
     requestAnimationFrame(render);
     web3d.renderer.render(web3d.scene, web3d.camera);
   };
@@ -112,8 +109,8 @@ const init = () => {
 };
 
 onMounted(() => {
-  // createWaterBall();
   init();
+  createWaterBall();
 });
 </script>
 
