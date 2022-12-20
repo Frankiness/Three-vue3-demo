@@ -95,6 +95,11 @@ const routes = [
     name: 'raising-code',
     component: () => import('../views/raising-code/index.vue'),
   },
+  {
+    path: '/auto-scale-sprite',
+    name: 'auto-scale-sprite',
+    component: () => import('../views/autoScaleSprite/index.vue'),
+  },
 ];
 
 const router = createRouter({

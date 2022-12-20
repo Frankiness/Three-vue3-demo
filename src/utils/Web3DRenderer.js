@@ -99,15 +99,8 @@ function createAmbientLight() {
 
 // 平行光
 function createDirectionalLight() {
-  const directionalLight = new THREE.DirectionalLight(
-    DIRECTIONAL_LIGHT_COLOR,
-    DIRECTIONAL_LIGHT_INTENSITY,
-  );
-  directionalLight.position.set(
-    DIRECTIONAL_POSITION_X,
-    DIRECTIONAL_POSITION_Y,
-    DIRECTIONAL_POSITION_Z,
-  );
+  const directionalLight = new THREE.DirectionalLight(DIRECTIONAL_LIGHT_COLOR, DIRECTIONAL_LIGHT_INTENSITY);
+  directionalLight.position.set(DIRECTIONAL_POSITION_X, DIRECTIONAL_POSITION_Y, DIRECTIONAL_POSITION_Z);
   directionalLight.castShadow = DIRECTIONAL_CAST_SHADOW;
   directionalLight.shadow.camera.far = 1000;
   directionalLight.shadow.camera.near = 0.5;
@@ -126,11 +119,7 @@ function createDirectionalLightHelper(directionalLight) {
 // 点光源
 function createPointLight() {
   const pointLight = new THREE.PointLight(POINT_LIGHT_COLOR);
-  pointLight.position.set(
-    POINT_LIGHT_POSITION_X,
-    POINT_LIGHT_POSITION_Y,
-    POINT_LIGHT_POSITION_Z,
-  );
+  pointLight.position.set(POINT_LIGHT_POSITION_X, POINT_LIGHT_POSITION_Y, POINT_LIGHT_POSITION_Z);
   return pointLight;
 }
 

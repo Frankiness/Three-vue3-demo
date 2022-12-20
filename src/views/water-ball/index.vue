@@ -10,8 +10,7 @@ import Water from './Water';
 
 let web3d = null;
 let container = ref(null);
-let water,
-  time = 0.0;
+let water;
 
 const vertexShader = `
   varying vec3 vNormal;

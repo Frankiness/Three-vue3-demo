@@ -2,12 +2,7 @@
   <!--  <router-view></router-view>-->
   <a-layout style="width: 100vw; height: 100vh">
     <a-layout-sider>
-      <a-menu
-        v-model:selectedKeys="selectedKeys"
-        theme="dark"
-        mode="inline"
-        @click="handleMuneClick"
-      >
+      <a-menu v-model:selectedKeys="selectedKeys" theme="dark" mode="inline" @click="handleMuneClick">
         <a-menu-item key="display-car">
           <span>改变模型材质颜色</span>
         </a-menu-item>
@@ -62,12 +57,13 @@
         <a-menu-item key="raising-code">
           <span>上升的数字</span>
         </a-menu-item>
+        <a-menu-item key="auto-scale-sprite">
+          <span>缩放Sprite</span>
+        </a-menu-item>
       </a-menu>
     </a-layout-sider>
     <a-layout>
-      <a-layout-content
-        :style="{ margin: '12px', background: '#fff', minHeight: '280px' }"
-      >
+      <a-layout-content :style="{ margin: '12px', background: '#fff', minHeight: '280px' }">
         <router-view></router-view>
       </a-layout-content>
     </a-layout>
