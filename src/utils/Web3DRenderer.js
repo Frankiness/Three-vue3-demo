@@ -18,7 +18,7 @@ const PERSPECTIVE_CAMERA_POSITION_X = 1500;
 const PERSPECTIVE_CAMERA_POSITION_Y = 1500;
 const PERSPECTIVE_CAMERA_POSITION_Z = 1500;
 const PERSPECTIVE_CAMERA_FOV = 45;
-const PERSPECTIVE_CAMERA_NEAR = 1;
+const PERSPECTIVE_CAMERA_NEAR = 0.1;
 const PERSPECTIVE_CAMERA_FAR = 2000;
 
 // Orthographic Camera settting
@@ -29,8 +29,8 @@ const ORTHOGRAPHIC_CAMERA_LEFT = window.innerWidth / -2;
 const ORTHOGRAPHIC_CAMERA_RIGHT = window.innerWidth / 2;
 const ORTHOGRAPHIC_CAMERA_TOP = window.innerHeight / 2;
 const ORTHOGRAPHIC_CAMERA_BOTTOM = window.innerHeight / -2;
-const ORTHOGRAPHIC_CAMERA_NEAR = -200;
-const ORTHOGRAPHIC_CAMERA_FAR = 20000;
+const ORTHOGRAPHIC_CAMERA_NEAR = 0.1;
+const ORTHOGRAPHIC_CAMERA_FAR = 2000;
 
 // ambient light setting
 const AMBIENT_LIGHT_COLOR = 0xffffff;
@@ -55,8 +55,8 @@ const RENDERER_BACKGROUND_COLOR = 0x262626; //空间背景颜色
 const RENDERER_ALPHA = 1; // 0~1
 
 // orbitControls
-const MIN_DISTANCE = 100; // 缩放最小距离
-const MAX_DISTANCE = 1000; // 缩放最大距离
+const MIN_DISTANCE = 0.1; // 缩放最小距离
+const MAX_DISTANCE = 2000; // 缩放最大距离
 
 let timer = null;
 

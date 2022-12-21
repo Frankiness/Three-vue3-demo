@@ -100,6 +100,11 @@ const routes = [
     name: 'auto-scale-sprite',
     component: () => import('../views/autoScaleSprite/index.vue'),
   },
+  {
+    path: '/sea',
+    name: 'sea',
+    component: () => import('../views/sea/index.vue'),
+  },
 ];
 
 const router = createRouter({

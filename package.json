@@ -11,6 +11,7 @@
     "ant-design-vue": "^3.2.7",
     "dat.gui": "^0.7.9",
     "heatmap.js": "^2.0.5",
+    "lil-gui": "^0.17.0",
     "three": "^0.140.0",
     "vue": "^3.2.25",
     "vue-router": "^4.0.16"

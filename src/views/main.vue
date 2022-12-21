@@ -60,6 +60,9 @@
         <a-menu-item key="auto-scale-sprite">
           <span>缩放Sprite</span>
         </a-menu-item>
+        <a-menu-item key="sea">
+          <span>sea</span>
+        </a-menu-item>
       </a-menu>
     </a-layout-sider>
     <a-layout>
