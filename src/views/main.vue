@@ -63,6 +63,9 @@
         <a-menu-item key="sea">
           <span>sea</span>
         </a-menu-item>
+        <a-menu-item key="cartoon">
+          <span>卡通渲染</span>
+        </a-menu-item>
       </a-menu>
     </a-layout-sider>
     <a-layout>

@@ -105,6 +105,11 @@ const routes = [
     name: 'sea',
     component: () => import('../views/sea/index.vue'),
   },
+  {
+    path: '/cartoon',
+    name: 'cartoon',
+    component: () => import('../views/cartoon/index.vue'),
+  },
 ];
 
 const router = createRouter({
