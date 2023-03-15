@@ -5,10 +5,11 @@
 <script setup>
 import * as THREE from 'three';
 import * as dat from 'lil-gui';
-import { onMounted, ref } from 'vue';
+import { onMounted, onUnmounted, ref } from 'vue';
 import { Web3DRenderer } from '../../utils/Web3DRenderer';
 import waterVertexShader from './shader/vertex.glsl';
 import waterFragmentShader from './shader/fragment.glsl.js';
+import { gui } from 'dat.gui';
 
 let web3d = ref(null);
 let container = ref(null);
@@ -115,6 +116,10 @@ const createGUI = () => {
 
 onMounted(() => {
   init();
+});
+
+onUnmounted(() => {
+  console.log(gui);
 });
 </script>
 
