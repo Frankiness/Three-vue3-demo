@@ -1,8 +1,8 @@
 <template>
   <!--  <router-view></router-view>-->
-  <a-layout style="width: 100vw; height: 100vh">
-    <a-layout-sider>
-      <a-menu v-model:selectedKeys="selectedKeys" theme="dark" mode="inline" @click="handleMuneClick">
+  <a-layout>
+    <a-layout-sider style="overflow-y: auto">
+      <a-menu v-model:selectedKeys="selectedKeys" theme="dark" mode="inline" @click="handleMuneClick" class="menu">
         <a-menu-item key="display-car">
           <span>改变模型材质颜色</span>
         </a-menu-item>
@@ -66,6 +66,9 @@
         <a-menu-item key="cartoon">
           <span>卡通渲染</span>
         </a-menu-item>
+        <a-menu-item key="test">
+          <span>test</span>
+        </a-menu-item>
       </a-menu>
     </a-layout-sider>
     <a-layout>
@@ -85,7 +88,7 @@ const handleMuneClick = (e) => {
   router.push(e.key);
 };
 </script>
-<style>
+<style lang="less">
 #components-layout-demo-custom-trigger .trigger {
   font-size: 18px;
   line-height: 64px;
@@ -106,5 +109,22 @@ const handleMuneClick = (e) => {
 
 .site-layout .site-layout-background {
   background: #fff;
+}
+.menu {
+  height: 100vh;
+  overflow-y: auto;
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: #f1f1f1;
+    border-radius: 10px;
+  }
 }
 </style>

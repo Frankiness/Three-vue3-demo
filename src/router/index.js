@@ -110,6 +110,11 @@ const routes = [
     name: 'cartoon',
     component: () => import('../views/cartoon/index.vue'),
   },
+  {
+    path: '/test',
+    name: 'test',
+    component: () => import('../views/test/index.vue'),
+  },
 ];
 
 const router = createRouter({
