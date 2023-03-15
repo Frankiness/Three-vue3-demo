@@ -196,7 +196,7 @@ class Water extends Mesh {
     };
 
     const material = new ShaderMaterial({
-      fragmentShader: mirrorShader.fragmentShader,
+      fragmentShader: mirrorShader.fragmentShader, // 水面材质shader
       vertexShader: mirrorShader.vertexShader,
       uniforms: UniformsUtils.clone(mirrorShader.uniforms),
       transparent: true,
