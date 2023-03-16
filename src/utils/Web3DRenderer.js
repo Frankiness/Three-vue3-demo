@@ -182,7 +182,7 @@ function createFloor() {
 // 鼠标视角控制
 function createOrbitControls(camera, renderer) {
   const controls = new OrbitControls(camera, renderer.domElement);
-  controls.enableDamping = true; //鼠标拖动视角延迟效果
+  // controls.enableDamping = true; //鼠标拖动视角延迟效果
   controls.target.set(0, 0, 0);
   // 上下翻转的最大角度
   controls.maxPolarAngle = Math.PI / 2;
