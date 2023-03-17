@@ -3,72 +3,11 @@
   <a-layout>
     <a-layout-sider style="overflow-y: auto">
       <a-menu v-model:selectedKeys="selectedKeys" theme="dark" mode="inline" @click="handleMuneClick" class="menu">
-        <a-menu-item key="display-car">
-          <span>改变模型材质颜色</span>
-        </a-menu-item>
-        <a-menu-item key="shadow">
-          <span>投影</span>
-        </a-menu-item>
-        <a-menu-item key="geojson">
-          <span>Geojson转三维</span>
-        </a-menu-item>
-        <a-menu-item key="radar">
-          <span>雷达波</span>
-        </a-menu-item>
-        <a-menu-item key="wave">
-          <span>扩散波</span>
-        </a-menu-item>
-        <a-menu-item key="fly-line">
-          <span>飞线</span>
-        </a-menu-item>
-        <a-menu-item key="exploder">
-          <span>模型爆炸拆解</span>
-        </a-menu-item>
-        <a-menu-item key="indexedDB">
-          <span>IndexedDB缓存模型</span>
-        </a-menu-item>
-        <a-menu-item key="clipping">
-          <span>物体剪裁</span>
-        </a-menu-item>
-        <a-menu-item key="flowTexture">
-          <span>流动纹理</span>
-        </a-menu-item>
-        <a-menu-item key="school">
-          <span>昼夜切换</span>
-        </a-menu-item>
-        <a-menu-item key="upFlow">
-          <span>建筑上升光圈</span>
-        </a-menu-item>
-        <a-menu-item key="sweep">
-          <span>城市扫光</span>
-        </a-menu-item>
-        <a-menu-item key="bloom">
-          <span>点击物体边缘泛光</span>
-        </a-menu-item>
-        <a-menu-item key="gltf-wire-frame">
-          <span>GLTF模型线框模式</span>
-        </a-menu-item>
-        <a-menu-item key="3d-heatmap">
-          <span>3D热力图</span>
-        </a-menu-item>
-        <a-menu-item key="water-ball">
-          <span>水球</span>
-        </a-menu-item>
-        <a-menu-item key="raising-code">
-          <span>上升的数字</span>
-        </a-menu-item>
-        <a-menu-item key="auto-scale-sprite">
-          <span>缩放Sprite</span>
-        </a-menu-item>
-        <a-menu-item key="sea">
-          <span>sea</span>
-        </a-menu-item>
-        <a-menu-item key="cartoon">
-          <span>卡通渲染</span>
-        </a-menu-item>
-        <a-menu-item key="test">
-          <span>test</span>
-        </a-menu-item>
+        <div v-for="route in routes">
+          <a-menu-item :key="route.path" v-if="route?.name">
+            <span>{{ route.name }}</span>
+          </a-menu-item>
+        </div>
       </a-menu>
     </a-layout-sider>
     <a-layout>
@@ -81,6 +20,7 @@
 <script setup>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { routes } from '../router/index';
 
 const router = useRouter();
 let selectedKeys = ref(['display-car']);
