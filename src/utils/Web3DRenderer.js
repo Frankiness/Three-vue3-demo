@@ -6,6 +6,8 @@ import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js';
 import { OutlinePass } from 'three/examples/jsm/postprocessing/OutlinePass.js';
 import { FXAAShader } from 'three/examples/jsm/shaders/FXAAShader.js';
+import { Reflector } from 'three/examples/jsm/objects/Reflector';
+import { vertexShader, fragmentShader } from '../views/rain/rain';
 
 // import { TWEEN } from 'three/examples/jsm/libs/tween.module.min.js'
 // import { GUI } from "three/examples/jsm/libs/dat.gui.module.js";
@@ -42,7 +44,7 @@ const DIRECTIONAL_LIGHT_INTENSITY = 0.8; // 0~1
 const DIRECTIONAL_POSITION_X = 50;
 const DIRECTIONAL_POSITION_Y = 1500;
 const DIRECTIONAL_POSITION_Z = 50;
-const DIRECTIONAL_CAST_SHADOW = true;
+const DIRECTIONAL_CAST_SHADOW = false;
 
 // point light setting
 const POINT_LIGHT_COLOR = 0xf5f5f5;
@@ -102,7 +104,7 @@ function createDirectionalLight() {
   const directionalLight = new THREE.DirectionalLight(DIRECTIONAL_LIGHT_COLOR, DIRECTIONAL_LIGHT_INTENSITY);
   directionalLight.position.set(DIRECTIONAL_POSITION_X, DIRECTIONAL_POSITION_Y, DIRECTIONAL_POSITION_Z);
   directionalLight.castShadow = DIRECTIONAL_CAST_SHADOW;
-  directionalLight.shadow.camera.far = 1000;
+  directionalLight.shadow.camera.far = 2000;
   directionalLight.shadow.camera.near = 0.5;
   directionalLight.shadow.camera.left = 1000;
   directionalLight.shadow.camera.right = -1000;
@@ -134,8 +136,8 @@ function createSpotLight() {
 
 // 环境光
 function createEnvironment(renderer) {
-  // const pmremGenerator = new THREE.PMREMGenerator(renderer);
-  // return pmremGenerator.fromScene(new RoomEnvironment()).texture;
+  const pmremGenerator = new THREE.PMREMGenerator(renderer);
+  return pmremGenerator.fromScene(new RoomEnvironment()).texture;
 }
 
 // 渲染器
@@ -169,9 +171,77 @@ function createGridHelper() {
 }
 
 // 创建地板
-function createFloor() {
-  const floorGeometry = new THREE.PlaneGeometry(800, 800, 1);
-  const floorMaterial = new THREE.MeshPhongMaterial({ color: 0xdddddd });
+function createFloor(self) {
+  const loadTexture = new THREE.TextureLoader();
+  const floorGeometry = new THREE.PlaneGeometry(200, 200, 1);
+  const floorMaterial = new THREE.MeshStandardMaterial({
+    map: loadTexture.load('texture/floor/Asphalt_001_COLOR.jpg'), //基本纹理贴图
+    roughnessMap: loadTexture.load('texture/floor/Asphalt_001_SPEC.jpg'), // 表面粗糙度贴图
+    normalMap: loadTexture.load('texture/floor/Asphalt_001_Nrm.jpg'), //法向贴图，影响光照计算，模拟凹凸不平
+    displacementMap: loadTexture.load('texture/floor/Asphalt_001_DISP.png'), //高度贴图，偏移物体表面坐标
+    aoMap: loadTexture.load('texture/floor/Asphalt_001_COLOR.jpg'), //环境光遮罩贴图，让被遮住的地方更暗
+  });
+  floorMaterial.normalMap.wrapS = floorMaterial.normalMap.wrapT = THREE.MirroredRepeatWrapping;
+  floorMaterial.roughnessMap.wrapS = floorMaterial.roughnessMap.wrapT = THREE.MirroredRepeatWrapping;
+  floorMaterial.displacementMap.wrapS = floorMaterial.displacementMap.wrapT = THREE.MirroredRepeatWrapping;
+
+  // 反射
+  let groundMirror = new Reflector(floorGeometry, {
+    clipBias: 0.003,
+    textureWidth: window.innerWidth * window.devicePixelRatio,
+    textureHeight: window.innerHeight * window.devicePixelRatio,
+    color: 0xffffff,
+  });
+  groundMirror.position.y = 0.5;
+  groundMirror.rotateX(-Math.PI / 2);
+  console.log(floorMaterial);
+  let uj = {
+    iGlobalTime: { value: 0 },
+    iTime: { value: 0 },
+    iTimeDelta: { value: 0 },
+    iResolution: { value: { x: 1872, y: 198, z: 1 } },
+    iMouse: { value: { x: 0, y: 0, z: 0, w: 0 } },
+    iFrame: { value: 0 },
+    iDate: { value: { x: 2023, y: 3, z: 17, w: 17 } },
+    iSampleRate: { value: 44100 },
+    iChannelTime: { value: [0, 0, 0, 0] },
+  };
+  groundMirror.material.uniforms = {
+    ...groundMirror.material.uniforms,
+    ...uj,
+    uNormalTexture: {
+      value: THREE.MirroredRepeatWrapping,
+    },
+    uOpacityTexture: {
+      value: THREE.MirroredRepeatWrapping,
+    },
+    uRoughnessTexture: {
+      value: THREE.MirroredRepeatWrapping,
+    },
+    uRainCount: {
+      value: 1000,
+    },
+    uTexScale: {
+      value: new THREE.Vector2(1, 4),
+    },
+    uTexOffset: {
+      value: new THREE.Vector2(1, -0.5),
+    },
+    uDistortionAmount: {
+      value: 0.25,
+    },
+    uBlurStrength: {
+      value: 8,
+    },
+    uMipmapTextureSize: {
+      value: new THREE.Vector2(window.innerWidth, window.innerHeight),
+    },
+  };
+  groundMirror.material.vertexShader = vertexShader;
+  groundMirror.material.fragmentShader = fragmentShader;
+  self.scene.add(groundMirror);
+
+  // const floorMaterial = new THREE.MeshPhongMaterial({ color: 0xdddddd });
   const floor = new THREE.Mesh(floorGeometry, floorMaterial);
   floor.receiveShadow = true; // 接受阴影
   floor.rotation.x = -Math.PI / 2;
@@ -279,16 +349,20 @@ export class Web3DRenderer {
     this.scene.add(this.directionalLight);
 
     this.pointLight = createPointLight();
-    // this.scene.add(this.pointLight)
+    this.scene.add(this.pointLight);
 
     // 初始化渲染器
     this.renderer = createWebGLRenderer(element, this.width, this.height);
     this.renderer.render(this.scene, this.camera);
+    this.renderer.outputEncoding = THREE.sRGBEncoding; // 改变渲染器编码格式
 
     this.renderer.localClippingEnabled = true;
 
     // 添加环境
     this.scene.environment = createEnvironment(this.renderer);
+
+    // 添加聚光灯
+    // this.scene.add(createSpotLight());
 
     // 初始化视角控制器
     this.orbitControls = createOrbitControls(this.camera, this.renderer);
@@ -301,7 +375,7 @@ export class Web3DRenderer {
 
     // this.scene.add(createGridHelper());
 
-    // this.scene.add(createFloor())
+    this.scene.add(createFloor(this));
 
     // 后期
     // 组合器composer
