@@ -23,3 +23,10 @@ export const loadModel = (url) => {
     );
   });
 };
+
+export function FBO() {
+  let width = window.innerWidth * window.devicePixelRatio;
+  let height = window.innerHeight * window.devicePixelRatio;
+
+  return new THREE.WebGLRenderTarget(width, height);
+}
