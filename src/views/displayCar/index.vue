@@ -1,15 +1,15 @@
 <template>
   <div id="container" ref="container"></div>
-  <Mask :show="maskShow" :percent="progress"/>
+  <Mask :show="maskShow" :percent="progress" />
 </template>
 
 <script setup>
 import * as THREE from 'three';
-import {Web3DRenderer} from '../../utils/Web3DRenderer';
-import {onBeforeUnmount, onMounted, ref} from 'vue';
-import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader';
-import {DRACOLoader} from 'three/examples/jsm/loaders/DRACOLoader';
-import {RGBELoader} from 'three/examples/jsm/loaders/RGBELoader';
+import { Web3DRenderer } from '../../utils/Web3DRenderer';
+import { onBeforeUnmount, onMounted, ref } from 'vue';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader';
+import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader';
 import * as dat from 'dat.gui';
 import Mask from '../../components/Mask.vue';
 
@@ -23,7 +23,7 @@ const gui = new dat.GUI();
 //使用draco压缩
 let dracoLoader = new DRACOLoader();
 dracoLoader.setDecoderPath('./draco/gltf/'); // 设置public下的解码路径，注意最后面的/
-dracoLoader.setDecoderConfig({type: 'js'});
+dracoLoader.setDecoderConfig({ type: 'js' });
 dracoLoader.preload();
 loader.setDRACOLoader(dracoLoader);
 
@@ -34,16 +34,16 @@ loader.setDRACOLoader(dracoLoader);
 const loadFile = (url) => {
   return new Promise((resolve, reject) => {
     loader.load(
-        url,
-        (gltf) => {
-          resolve(gltf);
-        },
-        ({loaded, total}) => {
-          progress.value = Math.abs((loaded / total) * 100);
-        },
-        (err) => {
-          reject(err);
-        },
+      url,
+      (gltf) => {
+        resolve(gltf);
+      },
+      ({ loaded, total }) => {
+        progress.value = Math.abs((loaded / total) * 100);
+      },
+      (err) => {
+        reject(err);
+      },
     );
   });
 };
@@ -52,13 +52,13 @@ const loadFile = (url) => {
  */
 const initScene = async () => {
   web3d = new Web3DRenderer(container.value);
-  web3d.setCameraPosition({x: 70, y: 100, z: 100});
+  web3d.setCameraPosition({ x: 70, y: 100, z: 100 });
   createHDR();
   const render = () => {
     requestAnimationFrame(render);
     web3d.renderer.render(web3d.scene, web3d.camera);
 
-    web3d.mipmapper.update(web3d.mirrorFBO.texture, web3d.rt, web3d.renderer);
+    // web3d.mipmapper.update(web3d.mirrorFBO.texture, web3d.rt, web3d.renderer);
     // console.log(web3d);
     // web3d.rain.visible = false;
     // web3d.renderer.setRenderTarget(web3d.bgFBO);

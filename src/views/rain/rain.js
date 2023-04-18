@@ -206,8 +206,6 @@ void main(){
 
 export const vertexShader2 = `
 uniform float iTime;
-uniform vec2 iResolution;
-uniform vec2 iMouse;
 
 varying vec2 vUv;
 
@@ -259,8 +257,6 @@ void main(){
 
 export const fragmentShader2 = `
 uniform float iTime;
-uniform vec2 iResolution;
-uniform vec2 iMouse;
 
 varying vec2 vUv;
 
