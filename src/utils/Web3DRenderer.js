@@ -51,7 +51,7 @@ const POINT_LIGHT_POSITION_Y = 3000;
 const POINT_LIGHT_POSITION_Z = 3000;
 
 // renderer setting  //0c1e2a
-const RENDERER_BACKGROUND_COLOR = '#010101'; //空间背景颜色
+const RENDERER_BACKGROUND_COLOR = '#97b2bb'; //空间背景颜色
 const RENDERER_ALPHA = 1; // 0~1
 
 // orbitControls
@@ -323,7 +323,7 @@ export class Web3DRenderer {
     // 添加环境
     this.scene.environment = createEnvironment(this.renderer);
     // 添加聚光灯
-    this.scene.add(createSpotLight());
+    // this.scene.add(createSpotLight());
   }
 
   /**
