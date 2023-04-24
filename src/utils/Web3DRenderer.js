@@ -380,6 +380,7 @@ export class Web3DRenderer {
   }
   disposeStatus() {
     this.stats = null;
-    document.querySelector('#stats').remove();
+    let dom = document?.querySelector('#stats');
+    dom && dom.remove();
   }
 }
