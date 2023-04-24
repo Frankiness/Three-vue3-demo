@@ -225,7 +225,7 @@ function initMeshGlb(data) {
 
           //底部4个发射光
           if (child.name == 'opacity-s') {
-            var material = new THREE.MeshStandardMaterial({
+            let material = new THREE.MeshStandardMaterial({
               map: texture,
               color: new THREE.Color(data.color).multiplyScalar(0.5),
               emissive: new THREE.Color(data.color).multiplyScalar(0.5),
@@ -239,7 +239,7 @@ function initMeshGlb(data) {
             child.material = material;
           }
           if (child.name == 'deepColor') {
-            var material = new THREE.MeshStandardMaterial({
+            let material = new THREE.MeshStandardMaterial({
               color: new THREE.Color(data.color).multiplyScalar(0.8),
               emissive: new THREE.Color(data.color).multiplyScalar(0.8),
               roughness: 0.438,
@@ -248,7 +248,7 @@ function initMeshGlb(data) {
             child.material = material;
           }
           if (child.name == 'lowColor') {
-            var material = new THREE.MeshStandardMaterial({
+            let material = new THREE.MeshStandardMaterial({
               color: new THREE.Color(data.color).multiplyScalar(0.5),
               emissive: new THREE.Color(data.color).multiplyScalar(0.5),
               roughness: 0.438,

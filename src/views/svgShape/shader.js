@@ -32,7 +32,7 @@ export const fragmentShader = `
 		if(power>0.95){
 			gl_FragColor =vec4(0);
 		}else{
-		gl_FragColor =colorb*colora;
+		  gl_FragColor =colorb*colora;
 			//gl_FragColor =vec4( (colorb).r*colora.r, (colorb).g*colora.g, (colorb).b*colora.b, (colora+colorb).a );
 		}
 	}

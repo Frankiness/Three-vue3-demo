@@ -26,12 +26,12 @@ let bloomComposer = null;
 const init = () => {
   web3d = new Web3DRenderer(container.value, { addLight: false });
   web3d.camera.position.set(0, 0, 0);
+  web3d.setBackgroundColor('#121212', 1);
+
   let floorMirror = createFloor();
   web3d.scene.add(floorMirror);
   createRain(); // 创建雨滴
   floorMirror.ignoreObjects.push(web3d.rain); // 水面反射去除雨滴
-
-  let sta = web3d.showStatus();
 
   const render = () => {
     web3d.renderer.autoClear = false;
@@ -298,7 +298,7 @@ function createProcessing() {
   bloomComposer.addPass(renderPass);
 
   // bloom
-  const bloomPass = new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1, 0.4, 0.1);
+  const bloomPass = new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 0.5, 0.8, 0.5);
   bloomPass.exposure = 1;
   bloomPass.threshold = 0;
   bloomPass.strength = 1;

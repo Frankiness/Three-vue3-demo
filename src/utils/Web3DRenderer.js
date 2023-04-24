@@ -309,6 +309,9 @@ export class Web3DRenderer {
       resize(element, this.camera, this.renderer, this.composer, this.effectFXAA);
     });
   }
+  setBackgroundColor(color = RENDERER_BACKGROUND_COLOR, alpha = RENDERER_ALPHA) {
+    this.renderer.setClearColor(color, alpha);
+  }
 
   addLight() {
     // 初始化灯光
@@ -321,7 +324,7 @@ export class Web3DRenderer {
     let pointLight = createPointLight();
     this.scene.add(pointLight);
     // 添加环境
-    this.scene.environment = createEnvironment(this.renderer);
+    // this.scene.environment = createEnvironment(this.renderer);
     // 添加聚光灯
     // this.scene.add(createSpotLight());
   }
