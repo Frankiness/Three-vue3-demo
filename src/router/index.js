@@ -116,6 +116,11 @@ const routes = [
     component: () => import('../views/rain/index.vue'),
   },
   {
+    path: '/svg',
+    name: '根据svg生成几何体',
+    component: () => import('../views/svgShape/index.vue'),
+  },
+  {
     path: '/test',
     name: 'test',
     component: () => import('../views/test/index.vue'),

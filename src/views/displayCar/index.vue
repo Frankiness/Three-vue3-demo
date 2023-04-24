@@ -57,14 +57,6 @@ const initScene = async () => {
   const render = () => {
     requestAnimationFrame(render);
     web3d.renderer.render(web3d.scene, web3d.camera);
-
-    // web3d.mipmapper.update(web3d.mirrorFBO.texture, web3d.rt, web3d.renderer);
-    // console.log(web3d);
-    // web3d.rain.visible = false;
-    // web3d.renderer.setRenderTarget(web3d.bgFBO);
-    // web3d.renderer.render(web3d.scene, web3d.fboCamera);
-    // web3d.renderer.setRenderTarget(null);
-    // web3d.rain.visible = true;
   };
   render();
 };
@@ -104,13 +96,22 @@ const createHDR = () => {
     maskShow.value = false; //关闭遮罩层
     gltf.scene.scale.set(0.1, 0.1, 0.1);
     gltf.scene.position.y = 16;
+    gltf.scene.traverse((child) => {
+      console.log(child);
+      if (child.name === '地面') {
+        console.log('地面：', child);
+      }
+
+      // child.material.emissive = child.material.color;
+      // child.material.emissiveMap = child.material.map;
+    });
     web3d.scene.add(gltf.scene);
   });
 };
 
 onMounted(() => {
   initScene();
-  createGUI();
+  // createGUI();
 });
 onBeforeUnmount(() => {
   gui.destroy();
