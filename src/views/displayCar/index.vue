@@ -97,11 +97,6 @@ const createHDR = () => {
     gltf.scene.scale.set(0.1, 0.1, 0.1);
     gltf.scene.position.y = 16;
     gltf.scene.traverse((child) => {
-      console.log(child);
-      if (child.name === '地面') {
-        console.log('地面：', child);
-      }
-
       // child.material.emissive = child.material.color;
       // child.material.emissiveMap = child.material.map;
     });
@@ -111,7 +106,7 @@ const createHDR = () => {
 
 onMounted(() => {
   initScene();
-  // createGUI();
+  createGUI();
 });
 onBeforeUnmount(() => {
   gui.destroy();

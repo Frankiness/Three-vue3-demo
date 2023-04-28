@@ -42,7 +42,7 @@ const DIRECTIONAL_LIGHT_INTENSITY = 0.8; // 0~1
 const DIRECTIONAL_POSITION_X = 50;
 const DIRECTIONAL_POSITION_Y = 1500;
 const DIRECTIONAL_POSITION_Z = 50;
-const DIRECTIONAL_CAST_SHADOW = false;
+const DIRECTIONAL_CAST_SHADOW = true;
 
 // point light setting
 const POINT_LIGHT_COLOR = '#ffffff';
@@ -318,15 +318,15 @@ export class Web3DRenderer {
     let ambientLight = createAmbientLight();
     ambientLight.name = 'ambientLight';
     this.scene.add(ambientLight);
-    let directionalLight = createDirectionalLight();
-    directionalLight.name = 'directionalLight';
-    this.scene.add(directionalLight);
+    this.directionalLight = createDirectionalLight();
+    this.directionalLight.name = 'directionalLight';
+    this.scene.add(this.directionalLight);
     let pointLight = createPointLight();
     this.scene.add(pointLight);
     // 添加环境
     // this.scene.environment = createEnvironment(this.renderer);
     // 添加聚光灯
-    // this.scene.add(createSpotLight());
+    this.scene.add(createSpotLight().spotLight);
   }
 
   /**

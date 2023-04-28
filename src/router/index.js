@@ -125,6 +125,11 @@ const routes = [
     name: 'test',
     component: () => import('../views/test/index.vue'),
   },
+  {
+    path: '/adjustLight',
+    name: '调节灯光',
+    component: () => import('../views/adjustLight/index.vue'),
+  },
 ];
 
 const router = createRouter({
