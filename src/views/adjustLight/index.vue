@@ -179,13 +179,4 @@ onBeforeUnmount(() => {
   height: 100%;
   position: relative;
 }
-
-.color-select {
-  width: 32px;
-  height: 32px;
-  padding: 0;
-  position: absolute;
-  top: 0;
-  right: 0;
-}
 </style>

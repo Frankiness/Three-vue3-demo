@@ -130,6 +130,16 @@ const routes = [
     name: '调节灯光',
     component: () => import('../views/adjustLight/index.vue'),
   },
+  {
+    path: '/path-finding',
+    name: '寻路',
+    component: () => import('../views/path-finding/index.vue'),
+  },
+  {
+    path: '/galaxy',
+    name: '银河',
+    component: () => import('../views/galaxy/index.vue'),
+  },
 ];
 
 const router = createRouter({
