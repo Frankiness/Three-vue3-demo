@@ -136,7 +136,7 @@ function createCode() {
     pos.vX = (Math.random() - 0.5) / 3 / 10;
     pos.vY = (0.05 + Math.random() * 0.1) / 5;
 
-    let geometry = new THREE.PlaneBufferGeometry(10, 10);
+    let geometry = new THREE.PlaneGeometry(10, 10);
     let s = Math.floor(Math.random() * 1000) + 1;
     geometry.attributes.uv.array = geometry.attributes.uv.array.map((e) => (e += s));
 

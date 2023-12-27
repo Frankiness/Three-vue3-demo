@@ -1,4 +1,4 @@
-import * as THREE from "three";
+import * as THREE from 'three';
 
 const frag_basic = `
 precision mediump float;
@@ -87,7 +87,7 @@ const Shader = {
 export function Radar(opts) {
   const {
     radius = 50,
-    color = "#fff",
+    color = '#fff',
     speed = 1,
     opacity = 1,
     angle = Math.PI,
@@ -105,7 +105,7 @@ export function Radar(opts) {
 
   const width = radius * 2;
 
-  const geometry = new THREE.PlaneBufferGeometry(width, width, 1, 1);
+  const geometry = new THREE.PlaneGeometry(width, width, 1, 1);
 
   const material = new THREE.ShaderMaterial({
     uniforms: {

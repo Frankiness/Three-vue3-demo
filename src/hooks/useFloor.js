@@ -30,7 +30,7 @@ export default function useFloor(self) {
     depthTest: true,
     depthWrite: false,
   });
-  let rotatingApertureGeometry = new THREE.PlaneBufferGeometry(500, 500);
+  let rotatingApertureGeometry = new THREE.PlaneGeometry(500, 500);
   let rotatingApertureMesh = new THREE.Mesh(rotatingApertureGeometry, rotatingApertureerial);
   rotatingApertureMesh.rotateX(-Math.PI / 2);
   rotatingApertureMesh.position.y = -8.02;
@@ -61,7 +61,7 @@ export default function useFloor(self) {
     depthWrite: false,
     // depthTest: false,
   });
-  let plane3 = new THREE.PlaneBufferGeometry(600, 600);
+  let plane3 = new THREE.PlaneGeometry(600, 600);
   let mesh3 = new THREE.Mesh(plane3, material3);
   mesh3.rotateX(-Math.PI / 2);
   mesh3.position.y = -8.06;

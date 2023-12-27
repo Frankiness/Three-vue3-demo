@@ -135,10 +135,15 @@ const routes = [
     name: '寻路',
     component: () => import('../views/path-finding/index.vue'),
   },
+  // {
+  //   path: '/galaxy',
+  //   name: '银河',
+  //   component: () => import('../views/galaxy/index.vue'),
+  // },
   {
-    path: '/galaxy',
-    name: '银河',
-    component: () => import('../views/galaxy/index.vue'),
+    path: '/turbine',
+    name: '涡轮',
+    component: () => import('../views/turbine/index.vue'),
   },
 ];
 

@@ -153,7 +153,7 @@ const createModel = async () => {
 };
 
 const createFloor = () => {
-  let planeGeo = new THREE.PlaneBufferGeometry(1000, 1000);
+  let planeGeo = new THREE.PlaneGeometry(1000, 1000);
   let planeMaterial = new THREE.MeshPhongMaterial({ color: '#fcfcfc' });
   let plane = new THREE.Mesh(planeGeo, planeMaterial);
   plane.rotation.x = -Math.PI / 2;

@@ -3,13 +3,13 @@ import {
   MeshBasicMaterial,
   MeshDepthMaterial,
   OrthographicCamera,
-  PlaneBufferGeometry,
+  PlaneGeometry,
   ShaderMaterial,
   WebGLRenderTarget,
-} from "three";
+} from 'three';
 
-import { HorizontalBlurShader } from "./shaders/HorizontalBlurShader";
-import { VerticalBlurShader } from "./shaders/VerticalBlurShader";
+import { HorizontalBlurShader } from './shaders/HorizontalBlurShader';
+import { VerticalBlurShader } from './shaders/VerticalBlurShader';
 
 // 参数设置
 const state = {
@@ -19,7 +19,7 @@ const state = {
     opacity: 1,
   },
   plane: {
-    color: "#ffffff",
+    color: '#ffffff',
     opacity: 1,
   },
 };
@@ -66,7 +66,7 @@ export const createContactShadow = (scene, renderer, shadowGroup) => {
   renderTargetBlur.texture.generateMipmaps = false;
 
   // make a plane and make it face up
-  const planeGeometry = new PlaneBufferGeometry(10, 10).rotateX(Math.PI / 2);
+  const planeGeometry = new PlaneGeometry(10, 10).rotateX(Math.PI / 2);
   const planeMaterial = new MeshBasicMaterial({
     map: renderTarget.texture,
     opacity: 1,
@@ -91,7 +91,7 @@ export const createContactShadow = (scene, renderer, shadowGroup) => {
 
   // the plane with the color of the ground
   const fillPlaneMaterial = new MeshBasicMaterial({
-    color: "#ffffff",
+    color: '#ffffff',
     opacity: 0,
     transparent: true,
     depthWrite: false,
@@ -114,8 +114,8 @@ export const createContactShadow = (scene, renderer, shadowGroup) => {
     shader.fragmentShader = /* glsl */ `
 						uniform float darkness;
 						${shader.fragmentShader.replace(
-              "gl_FragColor = vec4( vec3( 1.0 - fragCoordZ ), opacity );",
-              "gl_FragColor = vec4( vec3( 0.0 ), ( 1.0 - fragCoordZ ) * darkness );"
+              'gl_FragColor = vec4( vec3( 1.0 - fragCoordZ ), opacity );',
+              'gl_FragColor = vec4( vec3( 0.0 ), ( 1.0 - fragCoordZ ) * darkness );',
             )}
 					`;
   };

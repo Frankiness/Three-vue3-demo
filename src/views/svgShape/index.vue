@@ -47,7 +47,7 @@ const createSequenceFrame = (opt) => {
     },
     opt,
   );
-  let geometry = new THREE.PlaneBufferGeometry(options.width, options.height); //矩形平面
+  let geometry = new THREE.PlaneGeometry(options.width, options.height); //矩形平面
   let texture = textureLoader.load(options.image); // 加载图片
   texture.repeat.set(1 / options.column, 1 / options.row); // 从图像上截图第一帧
   let material = new THREE.MeshBasicMaterial({
