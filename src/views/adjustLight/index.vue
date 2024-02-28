@@ -144,7 +144,7 @@ const createModel = async () => {
   // gltf.castShadow = true;
   // web3d.scene.add(gltf.scene);
 
-  let geo = new THREE.BoxBufferGeometry(10, 10, 10);
+  let geo = new THREE.BoxGeometry(10, 10, 10);
   let mat = new THREE.MeshPhongMaterial({ color: '#111111' });
   let box = new THREE.Mesh(geo, mat);
   box.position.y = 10;

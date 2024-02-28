@@ -257,7 +257,7 @@ export class Web3DRenderer {
       PERSPECTIVE_CAMERA_POSITION_Z,
     );
     this.camera.name = 'camera';
-    this.camera.lookAt(0, 0, 0);
+    // this.camera.lookAt(0, 0, 0);
 
     // 初始化渲染器
     this.renderer = createWebGLRenderer(element, this.width, this.height);
@@ -265,7 +265,7 @@ export class Web3DRenderer {
 
     this.renderer.localClippingEnabled = true;
 
-    this.renderer.physicallyCorrectLights = true;
+    this.renderer.useLegacyLights = true;
 
     this.renderer.toneMapping = THREE.LinearToneMapping;
     this.renderer.toneMappingExposure = 0.5;
