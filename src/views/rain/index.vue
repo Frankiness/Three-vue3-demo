@@ -18,10 +18,13 @@ import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPa
 import { SMAAPass } from 'three/examples/jsm/postprocessing/SMAAPass';
 import { FontLoader } from 'three/examples/jsm/loaders/FontLoader';
 import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry';
+import { GUI } from 'three/examples/jsm/libs/lil-gui.module.min.js';
 
 let web3d = null;
 let container = ref(null);
 let bloomComposer = null;
+
+const gui = new GUI();
 
 const init = () => {
   web3d = new Web3DRenderer(container.value, { addLight: false });
@@ -299,11 +302,30 @@ function createProcessing() {
 
   // bloom
   const bloomPass = new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 0.5, 0.8, 0.5);
-  bloomPass.exposure = 1;
-  bloomPass.threshold = 0;
-  bloomPass.strength = 1;
-  bloomPass.radius = 0;
+
+  const params = {
+    exposure: 1,
+    threshold: 0.1,
+    strength: 0.3,
+    radius: 0.5,
+  };
+  bloomPass.exposure = params.exposure;
+  bloomPass.threshold = params.threshold;
+  bloomPass.strength = params.strength;
+  bloomPass.radius = params.radius;
   bloomComposer.addPass(bloomPass);
+
+  const bloomGui = gui.addFolder('Bloom');
+  bloomGui.add(params, 'exposure', 0, 5, 0.1);
+  bloomGui.add(params, 'threshold', 0, 5, 0.1);
+  bloomGui.add(params, 'strength', 0, 5, 0.1);
+  bloomGui.add(params, 'exposure', 0, 5, 0.1);
+  bloomGui.onChange(({ object }) => {
+    bloomPass.exposure = object.exposure;
+    bloomPass.threshold = object.threshold;
+    bloomPass.strength = object.strength;
+    bloomPass.radius = object.radius;
+  });
 
   // SMAA 抗锯齿
   const smaa = new SMAAPass();
