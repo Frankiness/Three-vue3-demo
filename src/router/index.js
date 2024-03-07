@@ -145,6 +145,11 @@ const routes = [
     name: '涡轮',
     component: () => import('../views/turbine/index.vue'),
   },
+  {
+    path: '/moveAnimation',
+    name: '轨迹移动',
+    component: () => import('../views/moveAnimation/index.vue'),
+  },
 ];
 
 const router = createRouter({
