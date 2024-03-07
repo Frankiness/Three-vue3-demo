@@ -67,12 +67,13 @@ function changePosition(position) {
   let offsetAngle = -Math.PI / 2;
   //创建一个4维矩阵
   let mtx = new THREE.Matrix4();
-  mtx.lookAt(model.position.clone(), position, model.up);
-  mtx.multiply(new THREE.Matrix4().makeRotationFromEuler(new THREE.Euler(0, offsetAngle, 0)));
-  //计算出需要进行旋转的四元数值
-  let toRot = new THREE.Quaternion().setFromRotationMatrix(mtx);
-  //根据以上值调整角度
-  model.quaternion.slerp(toRot, 0.2); // 如果是ArcCurve则不需要设置四元数
+  mtx.lookAt(model.position.clone(), position, model.up); // 构造一个从当前位置朝向target的旋转矩阵
+  // 根据偏移角度构造一个矩阵
+  let rotationMtx = new THREE.Matrix4().makeRotationFromEuler(new THREE.Euler(0, offsetAngle, 0));
+  mtx.multiply(rotationMtx);
+
+  let toRot = new THREE.Quaternion().setFromRotationMatrix(mtx); // 从矩阵中计算出四元数旋转度
+  model.quaternion.slerp(toRot, 0.2); // 调整朝向 插值过渡
   model.position.set(position.x, position.y, position.z);
 }
 
