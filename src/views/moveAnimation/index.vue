@@ -19,7 +19,7 @@ const loopTime = 10 * 1000;
 
 const init = () => {
   web3d = new Web3DRenderer(markContainer.value);
-  web3d.setCameraPosition({ x: 30, y: 30, z: 30 });
+  web3d.setCameraPosition({ x: 30, y: 100, z: 30 });
   const render = () => {
     let time = Date.now();
     let t = (time % loopTime) / loopTime; // t取值范围[0-1]
@@ -50,10 +50,10 @@ let curve;
 // 创建运动轨迹
 const makeCurve = () => {
   curve = new THREE.CatmullRomCurve3([
-    new THREE.Vector3(0, 0, 0),
-    new THREE.Vector3(0, 0, 50),
-    new THREE.Vector3(30, 0, 0),
-    new THREE.Vector3(70, 0, 10),
+    new THREE.Vector3(10, 0, -10),
+    new THREE.Vector3(20, 0, 50),
+    new THREE.Vector3(-30, 0, 20),
+    new THREE.Vector3(-70, 0, -40),
   ]);
   curve.curveType = 'catmullrom';
   curve.closed = true; // 设置是否闭环
@@ -75,7 +75,6 @@ const loadModel = async () => {
   const obj = await gltfLoader.loadAsync('/model/Benz/draco-benz.glb');
   model = obj.scene;
   model.rotation.set(0, Math.PI, 0);
-  model.scale.set(0.5, 0.5, 0.5);
   web3d.scene.add(model);
 };
 
