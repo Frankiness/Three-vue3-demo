@@ -1,5 +1,7 @@
 <template>
-  <div id="markContainer" ref="markContainer"></div>
+  <div id="markContainer" ref="markContainer">
+    <button style="position: absolute" @click="setCameraFollow">视角跟随</button>
+  </div>
 </template>
 
 <script setup>
@@ -11,6 +13,7 @@ import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader';
 
 let web3d = ref(null);
 let markContainer = ref(null);
+let isFollow = ref(false);
 
 const loopTime = 10 * 1000;
 
@@ -21,7 +24,16 @@ const init = () => {
     let time = Date.now();
     let t = (time % loopTime) / loopTime; // t取值范围[0-1]
     let position = curve?.getPoint(t); // 获取线段上点的位置
-    if (position?.x && model) {
+
+    let time2 = time - 1 * 1000;
+    let t2 = (time2 % loopTime) / loopTime; // 计算当前时间进度百分比
+    const position2 = curve?.getPoint(t2); // 比上面模型在曲线上的的位置晚2s的位置
+    if (position2 && isFollow.value) {
+      web3d.camera.position.set(position2.x, position2.y + 1, position2.z); // 更新跟随用的相机的位置，这里让它向上偏移了0.5
+      web3d.camera.lookAt(position); // 跟随用的相机朝向机器人的位置
+    }
+
+    if (position?.x && model && position2) {
       changePosition(position);
     }
     requestAnimationFrame(render);
@@ -30,13 +42,18 @@ const init = () => {
   render();
 };
 
+const setCameraFollow = () => {
+  isFollow.value = !isFollow.value;
+};
+
 let curve;
 // 创建运动轨迹
 const makeCurve = () => {
   curve = new THREE.CatmullRomCurve3([
     new THREE.Vector3(0, 0, 0),
-    new THREE.Vector3(0, 0, 10),
-    new THREE.Vector3(10, 0, 0),
+    new THREE.Vector3(0, 0, 50),
+    new THREE.Vector3(30, 0, 0),
+    new THREE.Vector3(70, 0, 10),
   ]);
   curve.curveType = 'catmullrom';
   curve.closed = true; // 设置是否闭环
@@ -62,7 +79,7 @@ const loadModel = async () => {
   web3d.scene.add(model);
 };
 
-function changePosition(position) {
+const changePosition = (position) => {
   //模型的偏移量
   let offsetAngle = -Math.PI / 2;
   //创建一个4维矩阵
@@ -75,7 +92,7 @@ function changePosition(position) {
   let toRot = new THREE.Quaternion().setFromRotationMatrix(mtx); // 从矩阵中计算出四元数旋转度
   model.quaternion.slerp(toRot, 0.2); // 调整朝向 插值过渡
   model.position.set(position.x, position.y, position.z);
-}
+};
 
 onMounted(() => {
   init();
@@ -88,5 +105,6 @@ onMounted(() => {
 #markContainer {
   width: 100%;
   height: 100%;
+  position: relative;
 }
 </style>
